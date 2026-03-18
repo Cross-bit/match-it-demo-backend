@@ -23,3 +23,4 @@ tools/data/restaurants/out/
 .env.test
 **/config/credentials/*
 !**/config/credentials/README
+.vscode
