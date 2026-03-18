@@ -10,15 +10,14 @@ a swipe-based voting session and group recommendation algorithms.
 
 ## Overview
 
-Match-it allows a group of friends to create a shared voting session, swipe
-through activity recommendations (movies or restaurants), and converge on something everyone
-likes. The backend is composed of several microservices, each responsible for a distinct domain of the application.
+Match-it allows a group of friends to create a shared voting session, swipe through activity recommendations (movies or restaurants), and converge on something everyone likes. The backend is composed of several microservices, each responsible for a distinct domain of the application.
 
 ```
                         ┌──────────────────────────────────────────────┐
                         │              Match-it Backend                │
                         │                                              │
-  Android Client  ───►  │  user-account-manager   friendship-manager   │
+  Android Client  ───►  │  user-account-manager                        │
+                        │  friendship-manager                          │
                         │  matching-sessions-service                   │
                         │  activity-recommendation-system              │
                         │                                              │
