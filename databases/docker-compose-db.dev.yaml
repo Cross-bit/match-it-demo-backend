@@ -1,0 +1,15 @@
+services:
+  db1:
+    build:
+      context: ./databases/postgresql/db1
+    container_name: db1
+    env_file:
+      - .env.dev
+    ports:
+      - ${MAIN_DB_PORT}:${MAIN_DB_PORT}
+    volumes:
+      - ./databases/postgresql/db1/init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: ${MAIN_DB_USER}
+      POSTGRES_PASSWORD: ${MAIN_DB_PASS}
+      POSTGRES_DB: ${MAIN_DB_NAME}

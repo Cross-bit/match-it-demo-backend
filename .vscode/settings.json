@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./services/activity-recommendation-system/src/database",
+        "./docs/analysis/movies-data"
+    ]
+}

@@ -1,0 +1,9 @@
+[
+    "restaurant", "cafe", "bar", "pub",
+    "italian_restaurant", "japanese_restaurant", "sushi_restaurant",
+    "pizza_restaurant", "indian_restaurant", "mexican_restaurant",
+    "thai_restaurant", "vegan_restaurant", "vegetarian_restaurant",
+    "fast_food_restaurant", "brunch_restaurant", "fine_dining_restaurant",
+    "buffet_restaurant", "seafood_restaurant",
+    "hospoda", "pivnice", "kantýna", "čajovna", "klub", "fastfood"
+]
