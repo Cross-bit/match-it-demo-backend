@@ -179,3 +179,11 @@ Some URLs in the `.env` file may need to be adjusted accordingly — see the inl
 ---
 
 > This repository contains a research prototype developed as part of a bachelor's thesis. Some datasets used in experiments are not included.
+
+## License
+
+Copyright (c) 2026 Ondřej Kříž
+
+This software is a research prototype licensed for **non-commercial research and educational use only**. Commercial use is prohibited without explicit written permission.
+
+See [LICENSE](./LICENSE) for full terms. For commercial licensing inquiries contact: ondra.kryz@seznam.cz
