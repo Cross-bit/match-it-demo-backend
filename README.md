@@ -1,14 +1,18 @@
 # Match-it Backend
 
-Backend services for the **Match-it** Android application — a group activity consensus app that helps friends agree on movies or nearby restaurants using a swipe-based voting session and group recommendation algorithms.
+Backend services for the **Match-it** Android application — a group activity
+consensus app that helps friends agree on movies or nearby restaurants using
+a swipe-based voting session and group recommendation algorithms.
 
-> The Android client is available at [match-it-android](https://gitlab.mff.cuni.cz/krizondr/match-it-android).
+> The Android client is available at [match-it-android](https://github.com/Cross-bit/match-it-demo-mobile).
 
 ---
 
 ## Overview
 
-Match-it allows a group of friends to create a shared voting session, swipe through activity recommendations (movies or restaurants), and converge on something everyone likes. The backend is composed of several microservices, each responsible for a distinct domain of the application.
+Match-it allows a group of friends to create a shared voting session, swipe
+through activity recommendations (movies or restaurants), and converge on something everyone
+likes. The backend is composed of several microservices, each responsible for a distinct domain of the application.
 
 ```
                         ┌──────────────────────────────────────────────┐
@@ -30,13 +34,17 @@ Match-it allows a group of friends to create a shared voting session, swipe thro
 All services live under `./services/`. Each subdirectory corresponds to one independently deployable service.
 
 ### `user-account-manager` · TypeScript / Node.js / Express
-Handles user registration, login, authentication (JWT), token refresh, and profile management (including profile picture upload).
+Handles user registration, login, authentication (JWT), token refresh, and
+profile management (including profile picture upload).
 
 ### `friendship-manager` · TypeScript / Node.js / Express
-Manages friend requests, friendship CRUD, and people search. Shares a database with `user-account-manager` to allow efficient relational queries across users and their connections.
+Manages friend requests, friendship CRUD, and people search. Shares a database with `user-account-manager`
+to allow efficient relational queries across users and their connections.
 
 ### `matching-sessions-service` · TypeScript / Node.js / Express
-Core service orchestrating the lifecycle of a voting session — from group creation and member invitations through live voting to consensus detection. Communicates bidirectionally with clients and delegates recommendation generation to `activity-recommendation-system`.
+Core service orchestrating the lifecycle of a voting session — from group creation
+and member invitations through live voting to consensus detection. Communicates bidirectionally
+with clients and delegates recommendation generation to `activity-recommendation-system`.
 
 ### `activity-recommendation-system` · Python / Flask
 Provides recommendation endpoints consumed by `matching-sessions-service`. Implements group recommendation algorithms for activity suggestions. Currently supports **movie recommendations**; restaurant recommendations rely on external POI data from Google Places API.
@@ -45,11 +53,7 @@ Provides recommendation endpoints consumed by `matching-sessions-service`. Imple
 
 ## Databases
 
-The system uses a single **PostgreSQL** instance.
-The schema is defined via ordered init scripts
-in `./databases/postgresql/db1/init/`.
-Tables are intentionally decoupled across service
-domains -- relationships are maintained via shared UUIDs rather than cross-domain foreign keys, so the schema can be split into per-service databases in the future if needed.
+The system uses a single **PostgreSQL** instance. Schema is defined via ordered init scripts in `./databases/postgresql/db1/init/`. Tables are intentionally decoupled across service domains — relationships are maintained via shared UUIDs rather than cross-domain foreign keys, so the schema can be split into per-service databases in the future if needed.
 
 ---
 
@@ -64,31 +68,22 @@ domains -- relationships are maintained via shared UUIDs rather than cross-domai
 
 ---
 
-## Dataset
+## Dataset Preparation
 
-**Restaurants:** The restaurant recommendation feature relies on a
-pre-fetched dataset obtained via the Google Places API.
-This dataset is not included in the repository. See
-`services/activity-recommendation-system/datasets/restaurants/README.md`
-for details.
+Dataset preparation scripts live under `./tools/data/`. See the README in each subdirectory for detailed usage instructions.
 
-**Movies:** The movie recommender (EASE) requires a
-[MovieLens](https://grouplens.org/datasets/movielens/) dataset for training.
-Place the following files into
-`services/activity-recommendation-system/datasets/movies/ml/`:
-```
-links.csv
-movies.csv
-ratings.csv
-```
+**Movies:** The movie recommender (EASE) requires a [MovieLens](https://grouplens.org/datasets/movielens/) dataset
+for training. Use the preparation script to produce a reduced subset — EASE builds a full item×item
+co-occurrence matrix and computes its inverse, which is memory and compute intensive on the full dataset.
+Processed files go into `services/activity-recommendation-system/src/datasets/movies/ml/`.
+See `tools/data/movies/README.md` for details.
 
-> It is recommended to use a reduced subset of the dataset.
-> EASE builds a full item×item co-occurrence matrix and computes
-> its inverse — training on the full MovieLens dataset is
-> memory and compute intensive.
 
-Dataset preparation scripts and instructions are available in `./tools/data/`.
-See the README in each subdirectory for details on required input files and usage.
+**Restaurants:** The restaurant recommendation feature relies on a pre-fetched dataset obtained via the Google
+Places API. This dataset is not included in the repository.
+See `tools/data/restaurants/README.md` for details.
+
+---
 
 ## Running Locally
 
@@ -101,67 +96,84 @@ The entire backend can be started in development mode from the repository root:
 This uses Docker Compose to build and start all services together with the database.
 
 ### Prerequisites
+
 - Docker + Docker Compose
-- Configured .env files — see .env.example in the repository root
+- Configured `.env` file — see `.env.example` in the repository root
 
 ### Environment Configuration
 
 Create a `.env` file based on the provided template:
 
-```sh
-    cp .env.example .env.dev
-```
-
-## Environment Configuration
-
-Create a `.env` file based on the provided template:
-
 ```bash
-cp .env.example .env
+cp .env.example .env.dev
 ```
 
-### Required & External APIs
+#### Firebase Credentials (FCM)
 
-- `ACCESS_TOKEN_SECRET` -- secret key for JWT access token verification
-- `REFRESH_TOKEN_SECRET` -- secret key for JWT refresh token verification
-- `FIREBASE_APPLICATION_CREDENTIALS` – required for push notifications (without this the app will not work).
-    Is required by the `matching-sessions-service` and `friendship-service`
-    You have to download appropriate authentication file for the FCM from the firebase and paste
-    it to the specified location in this variable in both containers.
-- `TMDB_API_KEY` – required for movie data
-- `GOOGLE_PLACES_API_KEY` – required for additional restaurant data e.g. photos fetch,
-    can be omitted if all the data were provided locally using the `prepare_movielens_dataset.py`.
+Firebase push notifications require a service account JSON file placed directly in the repository — setting the env variable alone is not enough.
 
-### Optional
-- `EMAIL_MAILGUN_API_KEY` – required only for email verification when registering, by default is set off using `BYPASS_EMAIL_VERIFICATION`
-- `SUDO_API_KEY` - some useful special endpoints REST API endpoints can make use of this
+1. Go to [Firebase Console](https://console.firebase.google.com/) → **Project Settings → Service Accounts → Generate new private key**
+2. Save the downloaded file as:
+   ```
+   config/credentials/firebase.json
+   ```
+3. Make sure your `.env` contains:
+   ```dotenv
+   FIREBASE_APPLICATION_CREDENTIALS=./config/credentials/firebase.json
+   ```
+
+> ⚠️ **The app will not work without this file.** It is required by both `matching-sessions-service` and `friendship-manager`. The `config/credentials/` directory is git-ignored — never commit the credentials file.
+
+#### Required Variables
+
+| Variable | Description |
+|---|---|
+| `ACCESS_TOKEN_SECRET` | Secret key for JWT access token signing |
+| `REFRESH_TOKEN_SECRET` | Secret key for JWT refresh token signing |
+| `FIREBASE_APPLICATION_CREDENTIALS` | Path to FCM credentials file (see above) |
+| `TMDB_API_KEY` | Required for movie metadata |
+| `GOOGLE_PLACES_API_KEY` | Required for restaurant data and photo fetching |
+
+#### Optional Variables
+
+| Variable | Description |
+|---|---|
+| `EMAIL_MAILGUN_API_KEY` | Required only for email verification on registration; disabled by default via `BYPASS_EMAIL_VERIFICATION` |
+| `SUDO_API_KEY` | Enables privileged REST endpoints |
 
 ### Networking Notes
 
-- Android emulator: use `10.0.2.2` to access backend running on host machine
-- Physical device: use your local IP address (e.g. `192.168.x.x`)
+- Android emulator: use `10.0.2.2` to reach the backend running on the host machine
+- Physical device: use your local IP (e.g. `192.168.x.x`)
 
-Some URLs in the `.env` file may need to be adjusted accordingly.
-See the comments.
-
+Some URLs in the `.env` file may need to be adjusted accordingly — see the inline comments.
 
 ---
+
 ## Repository Structure
 
 ```
 .
-├── database/               # DB schemas and migrations
+├── databases/
+│   └── postgresql/db1/
+│       └── init/                    # Ordered SQL init scripts
 ├── services/
 │   ├── user-account-manager/
 │   ├── friendship-manager/
 │   ├── matching-sessions-service/
+│   │   └── config/credentials/      # FCM credentials (git-ignored)
 │   └── activity-recommendation-system/
+│       └── src/
+│           └── services/
+│              └── datasets/
+│                  ├── movies/ml/       # Prepared MovieLens data (not included)
+│                  └── restaurants/     # Prepared Places API data (not included)
 └── tools/
-    └── data/               # Dataset generation & aggregation scripts for recommender
-        └── restaurants/
-        └── movies/
-    └── build/
-        └── compose.sh      # Build & deployment scripts
+    ├── build/
+    │   └── compose.sh               # Build & deployment helper
+    └── data/
+        ├── movies/                  # MovieLens preparation script + README
+        └── restaurants/             # Google Places aggregation script + README
 ```
 
 ---
