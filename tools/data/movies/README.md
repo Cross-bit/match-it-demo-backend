@@ -22,7 +22,7 @@ out/
 
 These files should then be placed in:
 ```
-services/activity-recommendation-system/datasets/movies/ml/
+services/activity-recommendation-system/src/services/datasets/movies/ml/
 ```
 
 ### Options
