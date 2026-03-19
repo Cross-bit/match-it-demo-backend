@@ -3,7 +3,7 @@ import { CreateMatchResult, MatchResultType } from "../../database/pg/types/sess
 import { checkUserHasSessionHistoryData, getUsersSessionByUUID, markSessionsAsBroken, insertUserMovieInitVotingResults, getSessionByUUID, getAllUsersHistorySessionsWithAllowedState, storeMatchedItems } from "../../database/sessionsManagementDatabase"
 import { sessionsCache, SessionData, MemberData } from "./SessionsCachingService"
 import { MatchedItemDTO, MatchingResultWSDTO, SessionTerminatedWSDTO, SessionTerminationReason } from "../../api/ws/manager/ws.dto"
-import { MatchingResult, sessionContentService } from "./sessionCoordinator"
+import { MatchingResult, sessionContentService } from "./SessionCoordinator"
 import { SessionState, SessionType } from "../../interface"
 import { CreateSessionParams, VotingResult } from "../types"
 import { sendFCMDataMessage } from "../FCM/sessionInviteNotifications"
@@ -581,7 +581,7 @@ const handleMatchingResult = async (
                     type: "MATCH_RESULT",
                     sessionRun: result.matchedItems.length > 0 ? result.matchedItems[0].run : 0,
                     sessionType: result.sessionType,
-                    matchedItems: result.matchedItems.map(item => ({
+                    matchedItems: result.matchedItems.map((item: MatchedItemDTO) => ({
                         itemId: item.itemId,
                         rank: item.rank,
                         run: item.run,

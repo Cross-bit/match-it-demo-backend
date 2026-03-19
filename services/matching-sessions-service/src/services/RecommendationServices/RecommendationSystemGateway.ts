@@ -329,6 +329,7 @@ export class RecommendationGateway implements IRecommendationGateway {
         try {
             const response = await axios.get(initUrl,
             {
+                    timeout: 45_000,
                     headers: {
                     Authorization: `Bearer ${env.RECSYS_TOKEN}`,
                     "X-Service-Name": env.MATCHING_SESSIONS_SERVICE_IDENTIFIER,

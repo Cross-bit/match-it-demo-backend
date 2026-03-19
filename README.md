@@ -97,11 +97,11 @@ This uses Docker Compose to build and start all services together with the datab
 ### Prerequisites
 
 - Docker + Docker Compose
-- Configured `.env` file — see `.env.example` in the repository root
+- Configured `.env.dev` file — see `.env.example` in the repository root
 
 ### Environment Configuration
 
-Create a `.env` file based on the provided template:
+Create a `.env.dev` file based on the provided template:
 
 ```bash
 cp .env.example .env.dev
@@ -116,12 +116,17 @@ Firebase push notifications require a service account JSON file placed directly 
    ```
    config/credentials/firebase.json
    ```
-3. Make sure your `.env` contains:
+3. Make sure your `.env.dev` contains:
    ```dotenv
    FIREBASE_APPLICATION_CREDENTIALS=./config/credentials/firebase.json
    ```
 
-> ⚠️ **The app will not work without this file.** It is required by both `matching-sessions-service` and `friendship-manager`. The `config/credentials/` directory is git-ignored — never commit the credentials file.
+⚠️ This application is designed for group interaction. Core functionality
+(group formation, invitations, and synchronized voting sessions) relies on
+Firebase Cloud Messaging.
+
+Without FCM, the system cannot support a multi-user session.
+> It is required by both `matching-sessions-service` and `friendship-manager`. The `config/credentials/` directory is git-ignored — never commit the credentials file.
 
 #### Required Variables
 
@@ -145,7 +150,7 @@ Firebase push notifications require a service account JSON file placed directly 
 - Android emulator: use `10.0.2.2` to reach the backend running on the host machine
 - Physical device: use your local IP (e.g. `192.168.x.x`)
 
-Some URLs in the `.env` file may need to be adjusted accordingly — see the inline comments.
+Some URLs in the `.env.dev` file may need to be adjusted accordingly — see the inline comments.
 
 ---
 

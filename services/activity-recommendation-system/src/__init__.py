@@ -87,6 +87,9 @@ flaskApp.register_blueprint(api, url_prefix="/api")
 def check_internal_auth():
     skip = os.environ.get("SKIP_INTERNAL_AUTH") == "1"
 
+    if request.path.startswith("/static/"):
+        return
+
     if skip:
         return
 
