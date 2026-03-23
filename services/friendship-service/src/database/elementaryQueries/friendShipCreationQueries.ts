@@ -129,14 +129,14 @@ export const getPendingFriendUserDatatsByUserIdQuery = async (client: PoolClient
     }
 
     const result = await client.query(queryObj);
-
+    logger.info("here mf", result.rows)
     return result.rows.map((row: any) => ({
         id: row.id,
         uuid: row.uuid,
         user_id: row.user_id,
         friend_data: {
             id: row.friend_id,
-            uid: row.friend_UUID,
+            uid: row.friend_uuid,
             name: row.name,
             email: row.email
         },

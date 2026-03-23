@@ -24,3 +24,4 @@ tools/data/restaurants/out/
 **/config/credentials/*
 !**/config/credentials/README
 .vscode
+*.log

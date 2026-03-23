@@ -2,7 +2,7 @@ import { DatabaseError, Pool, PoolClient } from 'pg';
 import { DbErrorMessage} from './Errors/databaseError'
 import * as db1 from './connection_db1';
 import { Friendship, NewFriendship, PendingFriendship, PendingFriendshipWithFrineData, UserData } from './interface'
-
+import logger from "../logger";
 
 import {
         createPendingFriendRequestQuery, removePendingFriendRequestQuery,
@@ -55,6 +55,7 @@ export const getAllPendingUsersByUserUUID = async (userUUID: string) : Promise<P
         }
 
         const pendingRequests = await getPendingFriendUserDatatsByUserIdQuery(client, userData?.id);
+        logger.info("here mf", pendingRequests)
         return pendingRequests;
 
     }, DbErrorMessage.InsertionError);

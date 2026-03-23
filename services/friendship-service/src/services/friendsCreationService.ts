@@ -89,7 +89,6 @@ export const resolvePendingFriendRequest = async (request: DTO.AdmitPendingFrien
     }
 
 
-
     return {
         friendshipId: resolvedReq.uuid,
         friendData: {
@@ -115,10 +114,10 @@ export const checkForFriendRequests = async (userUUID: string) : Promise<DTO.Pen
         return [];
     }
 
-    // this is small hot fix, jst for now, in certain scenario it returns also identity... which we don't want
     const noIdentity = pendingFriendships.filter(m => m.friend_data.uid !== userUUID)
 
     log.info("[FRIENDSHIP SERVICE]: returning list of pending friend requests", { userUUID: userUUID, requests: noIdentity })
+    logger.info("here mf", pendingFriendships)
     return noIdentity.map( data => ({
         requestId: data.uuid,
         friendData: {

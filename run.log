@@ -2167,3 +2167,119 @@ matching-sessions-service       | [2026-03-19T12:00:07.761Z] [32minfo[39m: [WS
 matching-sessions-service       | [2026-03-19T12:00:09.247Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
 matching-sessions-service       | [2026-03-19T12:00:27.741Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
 matching-sessions-service       | [2026-03-19T12:00:29.222Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:00:47.863Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:00:49.232Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:01:07.746Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:01:09.219Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:01:27.760Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:01:29.220Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:01:47.754Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:01:49.241Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:02:07.759Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:02:09.241Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:02:27.764Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:02:29.237Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:02:47.770Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:02:49.241Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:03:07.769Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:03:09.242Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:03:27.798Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:03:29.244Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:03:47.779Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:03:49.250Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:04:07.782Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:04:09.249Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:04:27.783Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:04:29.251Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:04:47.785Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:04:49.263Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:05:07.815Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:05:09.258Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:05:27.814Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:05:29.257Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:05:47.794Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:05:49.260Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:06:07.799Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:06:09.263Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:06:27.806Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:06:29.266Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:06:47.810Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:06:49.275Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:07:02.058Z] [33mwarn[39m: [WS closing] code=1006, reason= 
+matching-sessions-service       | [2026-03-19T12:07:02.061Z] [32minfo[39m: Handling 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 ws disconnection 
+matching-sessions-service       | [2026-03-19T12:07:02.063Z] [32minfo[39m: [WS: HANDLE USER DISCONNECT] {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:07:02.064Z] [32minfo[39m: [WS] User 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 deleting user record 
+matching-sessions-service       | [2026-03-19T12:07:02.067Z] [32minfo[39m: event raised: 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 close: true {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:07:02.070Z] [32minfo[39m: [SESSION MANAGER]: checking user is connected to a session 
+matching-sessions-service       |  {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:07:02.070Z] [32minfo[39m: [WS] Scheduling possible removal of 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 in 60s 
+matching-sessions-service       | [2026-03-19T12:07:07.833Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:07:27.832Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:07:47.821Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:08:02.072Z] [32minfo[39m: [WS] Timeout raised {"lastSeen":1773922022072,"wsStillMissing":true,"timeOutInterval":60000}
+matching-sessions-service       | [2026-03-19T12:08:02.072Z] [33mwarn[39m: [WS] Removing user 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 after grace period expired 
+matching-sessions-service       | [2026-03-19T12:08:02.073Z] [32minfo[39m: [WS] Timeout raised {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5","isAwaitingReconnect":false}
+matching-sessions-service       | [2026-03-19T12:08:02.074Z] [32minfo[39m: event raised: 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 close: false {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:08:02.074Z] [32minfo[39m: Handling connection on websocket close 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 
+matching-sessions-service       | [2026-03-19T12:08:02.074Z] [32minfo[39m: [SESSION MANAGER]: checking user is connected to a session 
+matching-sessions-service       |  {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:08:02.075Z] [32minfo[39m: [SESSION MANAGER]: checking user is connected to a session 
+matching-sessions-service       |  {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:08:02.076Z] [32minfo[39m: [WS] User 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 deleting timestamp 
+matching-sessions-service       | [2026-03-19T12:08:02.076Z] [32minfo[39m: Session data: 
+matching-sessions-service       | [2026-03-19T12:08:07.819Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:08:27.825Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:08:47.828Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:09:07.833Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:09:27.858Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:09:47.851Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:10:07.843Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:10:27.849Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+user-account-service            | [2026-03-19T12:10:32.288Z] [32minfo[39m: [NEW USER ACCESS TOKEN ISSUED]: {}
+matching-sessions-service       | [2026-03-19T12:10:32.333Z] [32minfo[39m: [WS authentication]: Authenticating websocket 
+matching-sessions-service       | [2026-03-19T12:10:32.333Z] [32minfo[39m: [WS authentication header]:  {"payload":"{\"authorization\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcml2aWxpZGdlIjoiTk9STUFMIiwiaXNSZWZyZXNoIjpmYWxzZSwiaWF0IjoxNzczOTIyMjMyLCJleHAiOjE3NzY1MTQyMzIsImlzcyI6ImMuZXhhbXBsZS5tYXRjaC1pdC51c2VyLWFjY291bnQtc2VydmljZSIsInN1YiI6IjFmM2ZlZjRkLTFiYWUtNDA0OC04ZDU2LTM2ZjRkMTA5YjhiNSJ9.xdqcudttSgoWxnS0vNN1OXqhIGU-p836GxaWhcd0lFI\",\"upgrade\":\"websocket\",\"connection\":\"Upgrade\",\"sec-websocket-key\":\"Uf3WXT89jfW3+4Pyw0YwAA==\",\"sec-websocket-version\":\"13\",\"sec-websocket-extensions\":\"permessage-deflate\",\"host\":\"192.168.0.245:8050\",\"accept-encoding\":\"gzip\",\"user-agent\":\"okhttp/4.12.0\"}","authHeader":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcml2aWxpZGdlIjoiTk9STUFMIiwiaXNSZWZyZXNoIjpmYWxzZSwiaWF0IjoxNzczOTIyMjMyLCJleHAiOjE3NzY1MTQyMzIsImlzcyI6ImMuZXhhbXBsZS5tYXRjaC1pdC51c2VyLWFjY291bnQtc2VydmljZSIsInN1YiI6IjFmM2ZlZjRkLTFiYWUtNDA0OC04ZDU2LTM2ZjRkMTA5YjhiNSJ9.xdqcudttSgoWxnS0vNN1OXqhIGU-p836GxaWhcd0lFI","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcml2aWxpZGdlIjoiTk9STUFMIiwiaXNSZWZyZXNoIjpmYWxzZSwiaWF0IjoxNzczOTIyMjMyLCJleHAiOjE3NzY1MTQyMzIsImlzcyI6ImMuZXhhbXBsZS5tYXRjaC1pdC51c2VyLWFjY291bnQtc2VydmljZSIsInN1YiI6IjFmM2ZlZjRkLTFiYWUtNDA0OC04ZDU2LTM2ZjRkMTA5YjhiNSJ9.xdqcudttSgoWxnS0vNN1OXqhIGU-p836GxaWhcd0lFI"}
+matching-sessions-service       | [2026-03-19T12:10:32.337Z] [32minfo[39m: [WS authentication succeeded for user 1f3fef4d-1bae-4048-8d56-36f4d109b8b5] 
+matching-sessions-service       | [2026-03-19T12:10:32.337Z] [32minfo[39m: [WS on connection]: Connecting user 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 to websocket 
+matching-sessions-service       | [2026-03-19T12:10:32.337Z] [32minfo[39m: [WS: ADDING USER to connection] 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 {"uuid":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:10:33.339Z] [32minfo[39m: [WS: USER CONNECTED OK] 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 
+matching-sessions-service       | [2026-03-19T12:10:47.849Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:10:52.360Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:11:07.853Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:11:12.363Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:11:27.857Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:11:32.383Z] [32minfo[39m: [WS SEND unreliable] send message to 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 [object Object] 
+matching-sessions-service       | [2026-03-19T12:11:47.611Z] [33mwarn[39m: [WS closing] code=1006, reason= 
+matching-sessions-service       | [2026-03-19T12:11:47.613Z] [32minfo[39m: Handling 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 ws disconnection 
+matching-sessions-service       | [2026-03-19T12:11:47.613Z] [32minfo[39m: [WS: HANDLE USER DISCONNECT] {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:11:47.614Z] [32minfo[39m: [WS] User 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 deleting user record 
+matching-sessions-service       | [2026-03-19T12:11:47.614Z] [32minfo[39m: event raised: 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 close: true {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:11:47.614Z] [32minfo[39m: [SESSION MANAGER]: checking user is connected to a session 
+matching-sessions-service       |  {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:11:47.614Z] [32minfo[39m: [WS] Scheduling possible removal of 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 in 60s 
+matching-sessions-service       | [2026-03-19T12:11:47.860Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:12:07.896Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:12:27.908Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:12:47.622Z] [32minfo[39m: [WS] Timeout raised {"lastSeen":1773922307614,"wsStillMissing":true,"timeOutInterval":60008}
+matching-sessions-service       | [2026-03-19T12:12:47.622Z] [33mwarn[39m: [WS] Removing user 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 after grace period expired 
+matching-sessions-service       | [2026-03-19T12:12:47.625Z] [32minfo[39m: [WS] Timeout raised {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5","isAwaitingReconnect":false}
+matching-sessions-service       | [2026-03-19T12:12:47.625Z] [32minfo[39m: event raised: 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 close: false {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:12:47.626Z] [32minfo[39m: Handling connection on websocket close 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 
+matching-sessions-service       | [2026-03-19T12:12:47.626Z] [32minfo[39m: [SESSION MANAGER]: checking user is connected to a session 
+matching-sessions-service       |  {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:12:47.626Z] [32minfo[39m: [SESSION MANAGER]: checking user is connected to a session 
+matching-sessions-service       |  {"userUUID":"1f3fef4d-1bae-4048-8d56-36f4d109b8b5"}
+matching-sessions-service       | [2026-03-19T12:12:47.626Z] [32minfo[39m: [WS] User 1f3fef4d-1bae-4048-8d56-36f4d109b8b5 deleting timestamp 
+matching-sessions-service       | [2026-03-19T12:12:47.626Z] [32minfo[39m: Session data: 
+matching-sessions-service       | [2026-03-19T12:12:47.914Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:13:07.877Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:13:27.908Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:13:47.894Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:14:08.325Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:14:27.924Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:14:47.920Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:15:07.902Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:15:27.900Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:15:47.923Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:16:07.919Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:16:27.911Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
+matching-sessions-service       | [2026-03-19T12:16:47.917Z] [32minfo[39m: [WS SEND unreliable] send message to 3eb53a9a-1f68-40db-a030-e47988f8e55e [object Object] 
