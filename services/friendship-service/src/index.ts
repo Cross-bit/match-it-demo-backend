@@ -6,6 +6,8 @@ import { router as v1peopleRouter } from "./v1/routes/peopleRouter";
 import cors from "cors";
 import logger from "./logger"
 import { errorHandler } from "./middleware/errorHandler";
+import swaggerUi from "swagger-ui-express";
+const swaggerDoc = require("./v1/docs/swagger.json");
 
 const expressApp: Application = express();
 
@@ -19,6 +21,7 @@ const PORT = +(process.env.PORT || 5500)
 expressApp.use(cors());
 expressApp.use(express.json());
 expressApp.use(authenticateToken)
+expressApp.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 
 ///////////////////////////////////

@@ -12,6 +12,8 @@ import http from "http"
 import cors from "cors";
 import path from "path";
 import { errorHandler } from './middleware/ErrorHandler';
+import swaggerUi from "swagger-ui-express";
+const swaggerDoc = require("./v1/docs/swagger.json");
 
 const expressApp: Application = express();
 
@@ -20,6 +22,7 @@ const PORT = +(process.env.PORT || 5500)
 expressApp.use(cors());
 expressApp.use(express.json());
 
+expressApp.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 // Authenticated endpoints
 

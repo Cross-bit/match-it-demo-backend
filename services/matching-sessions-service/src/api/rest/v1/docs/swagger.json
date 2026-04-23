@@ -1,15 +1,1138 @@
 {
-    "openapi": "3.1.0",
-    "info": {
-        "version": "1.0.0",
-        "title": "Matching session service API",
-        "description": "This is the REST API for the match-it session management."
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Matching sessions service API",
+    "description": "REST API for match-it session management."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Service root URL."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "User/session availability endpoints."
     },
-    "servers": [
-        {
-            "url": "/api/v1",
-            "description": "Base URL path for the API endpoints."
+    {
+      "name": "Session",
+      "description": "Session lifecycle and participation."
+    },
+    {
+      "name": "Initialization",
+      "description": "Session pre-initialization endpoints."
+    },
+    {
+      "name": "Chat",
+      "description": "Session chat history endpoints."
+    },
+    {
+      "name": "Assets",
+      "description": "Cards/assets retrieval endpoints."
+    }
+  ],
+  "paths": {
+    "/api/v1/users/availability": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Check users availability",
+        "description": "Returns availability information for provided user UUIDs.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersAvailabilityRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Users availability data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersAvailabilityInfoDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
         }
-    ],
-    "apis": ["../routes/*.ts"]
+      }
+    },
+    "/api/v1/session/create": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Create session",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Session created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/session/start/{sessionUUID}": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Start session",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionUUIDPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session started.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleApiResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/session/terminate/{sessionUUID}": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Terminate session",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionUUIDPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Termination result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleApiResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "409": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/session/sessionState/{sessionUUID}": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Get session state",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionUUIDPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current session state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionStateResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/session/connect/{sessionUUID}": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Connect user to session",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionUUIDPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User connected.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleApiResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/session/disconnect/{sessionUUID}": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Disconnect user from session",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionUUIDPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User disconnected.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleApiResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/session/reject/{sessionUUID}": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Reject session invite",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionUUIDPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite rejected.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleApiResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/session/history": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "summary": "Get user session history",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "History sessions list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionsHistoryDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/init/movies": {
+      "get": {
+        "tags": [
+          "Initialization"
+        ],
+        "summary": "Get init movie cards",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Init movie cards payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "movies": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    }
+                  },
+                  "required": [
+                    "movies"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Initialization"
+        ],
+        "summary": "Store init movie voting results",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionUpdateRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Voting results stored.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleApiResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/init/check": {
+      "post": {
+        "tags": [
+          "Initialization"
+        ],
+        "summary": "Check if session type is initialized",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckSessionInitializedRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Initialization check result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleApiResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "409": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/chat/load/{sessionUUID}": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "summary": "Load session chat messages",
+        "description": "Returns all messages or messages after a timestamp (`after` query param).",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/sessionUUIDPath"
+          },
+          {
+            "in": "query",
+            "name": "after",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Unix timestamp (ms). If missing, loads full history."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Loaded session chat messages.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllChatMessagesDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/assets/cards": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Get card previews",
+        "description": "Public endpoint returning cards preview for provided IDs and session type.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cardIds",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma separated numeric IDs. Example: `42,555,14`."
+          },
+          {
+            "in": "query",
+            "name": "sessionType",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SessionType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cards data payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardsDataDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query arguments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "parameters": {
+      "sessionUUIDPath": {
+        "in": "path",
+        "name": "sessionUUID",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "responses": {
+      "ErrorResponse": {
+        "description": "Standard API error payload.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponseDTO"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "SessionType": {
+        "type": "string",
+        "enum": [
+          "CUISINE",
+          "MOVIE",
+          "SPORT",
+          "EVENT",
+          "RESTAURANT",
+          "BOARDGAME"
+        ]
+      },
+      "SessionState": {
+        "type": "string",
+        "enum": [
+          "CREATED",
+          "INVITING",
+          "RUNNING",
+          "MATCHED",
+          "FINISHED",
+          "BROKEN"
+        ]
+      },
+      "SimpleApiResponseDTO": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "enum": [
+              "OK",
+              "NOK"
+            ]
+          }
+        },
+        "required": [
+          "result"
+        ]
+      },
+      "CreateSessionRequest": {
+        "type": "object",
+        "properties": {
+          "invitedMemberUUIDs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1
+          },
+          "sessionType": {
+            "$ref": "#/components/schemas/SessionType"
+          }
+        },
+        "required": [
+          "invitedMemberUUIDs",
+          "sessionType"
+        ]
+      },
+      "CreateSessionResponse": {
+        "type": "object",
+        "properties": {
+          "sessionUUID": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "sessionUUID"
+        ]
+      },
+      "SessionStateResponseDTO": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/SessionState"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "SessionSummaryDTO": {
+        "type": "object",
+        "properties": {
+          "sessionUUID": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionType": {
+            "$ref": "#/components/schemas/SessionType"
+          },
+          "state": {
+            "$ref": "#/components/schemas/SessionState"
+          },
+          "createdAt": {
+            "type": "integer",
+            "description": "Unix timestamp."
+          },
+          "size": {
+            "type": "integer"
+          },
+          "isCreator": {
+            "type": "boolean"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "sessionUUID",
+          "sessionType",
+          "state",
+          "createdAt",
+          "size",
+          "isCreator",
+          "users"
+        ]
+      },
+      "SessionsHistoryDTO": {
+        "type": "object",
+        "properties": {
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionSummaryDTO"
+            }
+          }
+        },
+        "required": [
+          "sessions"
+        ]
+      },
+      "UsersAvailabilityRequest": {
+        "type": "object",
+        "properties": {
+          "usersUUIDs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "usersUUIDs"
+        ]
+      },
+      "UsersAvailabilityInfoItem": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionType": {
+            "$ref": "#/components/schemas/SessionType"
+          },
+          "creatorUUID": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "type": "string",
+            "description": "Availability state from domain layer."
+          }
+        },
+        "required": [
+          "uuid",
+          "sessionType",
+          "creatorUUID",
+          "state"
+        ],
+        "additionalProperties": true
+      },
+      "UsersAvailabilityInfoDTO": {
+        "type": "object",
+        "properties": {
+          "usersInfo": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UsersAvailabilityInfoItem"
+            }
+          }
+        },
+        "required": [
+          "usersInfo"
+        ]
+      },
+      "VotingResultItem": {
+        "type": "object",
+        "properties": {
+          "memberUUID": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "vote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "memberUUID",
+          "vote"
+        ],
+        "additionalProperties": true
+      },
+      "SessionUpdateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "sessionUUID": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "votingResult": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VotingResultItem"
+            }
+          },
+          "sessionMetadata": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "sessionUUID",
+          "votingResult"
+        ]
+      },
+      "CheckSessionInitializedRequest": {
+        "type": "object",
+        "properties": {
+          "sessionType": {
+            "$ref": "#/components/schemas/SessionType"
+          }
+        },
+        "required": [
+          "sessionType"
+        ]
+      },
+      "ChatCardPreviewDTO": {
+        "type": "object",
+        "properties": {
+          "cardId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "thumbnailUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "cardId",
+          "title"
+        ]
+      },
+      "ChatAttachmentDTO": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mimeType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "width": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "height": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": true
+          }
+        }
+      },
+      "MatchedItemDTO": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "MatchResultSystemEventDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "MATCH_RESULT"
+          },
+          "sessionRun": {
+            "type": "integer"
+          },
+          "sessionType": {
+            "$ref": "#/components/schemas/SessionType"
+          },
+          "matchedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MatchedItemDTO"
+            }
+          },
+          "matchedItemUUID": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "type",
+          "sessionRun",
+          "sessionType",
+          "matchedItems",
+          "matchedItemUUID"
+        ]
+      },
+      "MessageStatus": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "SENT",
+          "DELIVERED"
+        ]
+      },
+      "ChatMessageDTO": {
+        "type": "object",
+        "properties": {
+          "messageUuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sessionUuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userUuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "integer"
+          },
+          "text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "attachment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChatAttachmentDTO"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cardPreview": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChatCardPreviewDTO"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "systemEvent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/MatchResultSystemEventDTO"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/MessageStatus"
+          }
+        },
+        "required": [
+          "messageUuid",
+          "sessionUuid",
+          "userUuid",
+          "createdAt"
+        ]
+      },
+      "AllChatMessagesDTO": {
+        "type": "object",
+        "properties": {
+          "sessionUUID": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChatMessageDTO"
+            }
+          }
+        },
+        "required": [
+          "sessionUUID",
+          "messages"
+        ]
+      },
+      "CardsDataDTO": {
+        "type": "object",
+        "properties": {
+          "sessionType": {
+            "$ref": "#/components/schemas/SessionType"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "required": [
+          "sessionType",
+          "cards"
+        ]
+      },
+      "ErrorResponseDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "required": [
+          "name",
+          "message",
+          "status"
+        ]
+      }
+    }
+  }
 }

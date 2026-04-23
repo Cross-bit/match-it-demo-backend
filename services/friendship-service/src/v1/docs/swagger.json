@@ -1,0 +1,359 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Friendship service API",
+    "description": "REST API for friends search, requests and friendship management."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Service root URL."
+    }
+  ],
+  "tags": [
+    {
+      "name": "FriendsRequests",
+      "description": "Pending friendship requests operations."
+    },
+    {
+      "name": "Friends",
+      "description": "Current friendship relations."
+    },
+    {
+      "name": "Search",
+      "description": "User search endpoints."
+    }
+  ],
+  "paths": {
+    "/api/v1/friends-requests/send": {
+      "post": {
+        "tags": ["FriendsRequests"],
+        "summary": "Send friend request",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendFriendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created pending request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewPendingRequestResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "424": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/friends-requests/admit": {
+      "post": {
+        "tags": ["FriendsRequests"],
+        "summary": "Admit pending friend request",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdmitFriendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Friendship created from pending request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewFriendshipResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "424": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/friends-requests/check": {
+      "get": {
+        "tags": ["FriendsRequests"],
+        "summary": "Check pending requests for current user",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Pending requests list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "requests": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PendingRequestQueryResponse"
+                      }
+                    }
+                  },
+                  "required": ["requests"]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/friends": {
+      "get": {
+        "tags": ["Friends"],
+        "summary": "Get all friends of current user",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Friends list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "friends": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/UserData"
+                      }
+                    }
+                  },
+                  "required": ["friends"]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Friends"],
+        "summary": "Remove friend relation",
+        "description": "Current implementation returns `{ result: \"OK\" }`.",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Removal result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleResultResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/search/{email}": {
+      "get": {
+        "tags": ["Search"],
+        "summary": "Search person by email",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "email",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found person.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "person": {
+                      "$ref": "#/components/schemas/SearchedUserData"
+                    }
+                  },
+                  "required": ["person"]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "424": {
+            "$ref": "#/components/responses/ErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "ErrorResponse": {
+        "description": "Standard API error payload.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponseDTO"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "SendFriendRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["userId"]
+      },
+      "AdmitFriendRequest": {
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["requestId"]
+      },
+      "UserData": {
+        "type": "object",
+        "properties": {
+          "uuid": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "profilePicUrl": { "type": "string" }
+        },
+        "required": ["uuid", "name", "email", "profilePicUrl"]
+      },
+      "SearchedUserData": {
+        "type": "object",
+        "properties": {
+          "uuid": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "isFriend": { "type": "boolean" },
+          "hasInvitation": { "type": "boolean" }
+        },
+        "required": ["uuid", "name", "email", "isFriend", "hasInvitation"]
+      },
+      "NewFriendshipResponse": {
+        "type": "object",
+        "properties": {
+          "friendshipId": { "type": "string", "format": "uuid" },
+          "friendData": { "$ref": "#/components/schemas/UserData" },
+          "creationTime": { "type": "string" }
+        },
+        "required": ["friendshipId", "friendData", "creationTime"]
+      },
+      "NewPendingRequestResponse": {
+        "type": "object",
+        "properties": {
+          "requestId": { "type": "string", "format": "uuid" },
+          "creationTime": { "type": "string" }
+        },
+        "required": ["requestId", "creationTime"]
+      },
+      "PendingRequestQueryResponse": {
+        "type": "object",
+        "properties": {
+          "requestId": { "type": "string", "format": "uuid" },
+          "friendData": {
+            "type": "object",
+            "properties": {
+              "uuid": { "type": "string", "format": "uuid" },
+              "name": { "type": "string" },
+              "email": { "type": "string", "format": "email" }
+            },
+            "required": ["uuid", "name", "email"]
+          }
+        },
+        "required": ["requestId", "friendData"]
+      },
+      "SimpleResultResponse": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "enum": ["OK", "NOK"]
+          }
+        },
+        "required": ["result"]
+      },
+      "ErrorResponseDTO": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "message": { "type": "string" },
+          "status": { "type": "integer" },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "required": ["name", "message", "status"]
+      }
+    }
+  }
+}
