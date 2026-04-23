@@ -1,5 +1,5 @@
 import { SessionType, SessionState } from "../../interface"
-import { getAllSessionsByState, insertNewSession, markSessionsAsBroken, updateSessionsStateByIds, updateUsersConnectionState, updateUserMetadata } from "../../database/sessionsManagementDatabase"
+import { SessionsManagementDbApi, sessionsManagementDbApi } from "../../database/sessionsManagementDbApi";
 import { MatchingSessionWithUsers } from "../../database/pg/types/session.db.types";
 import { MatchingSession, SessionUser } from "../../database/pg/types/session.db.types";
 import { getUsersFcmsByUserUUIDs } from "../../database/usersDatabase";
@@ -81,9 +81,11 @@ class SessionsCachingService
 {
 
     private sessions: Map<sessionUUID, SessionData>
+    private readonly sessionsDb: SessionsManagementDbApi;
 
-    constructor() {
+    constructor(sessionsDb: SessionsManagementDbApi = sessionsManagementDbApi) {
         this.sessions = new Map<sessionUUID, SessionData>();
+        this.sessionsDb = sessionsDb;
     }
 
     getSessionData = (uuid: string): Readonly<SessionData> | null => {
@@ -100,10 +102,10 @@ class SessionsCachingService
         const allowedStates = [ SessionState.CREATED, SessionState.INVITING, SessionState.RUNNING ];
 
         const sessions: MatchingSession[]
-        = await getAllSessionsByState(allowedStates);
+        = await this.sessionsDb.getAllSessionsByState(allowedStates);
 
         if (sessions.length > 0) {
-            await markSessionsAsBroken(sessions.map(s => s.id))
+            await this.sessionsDb.markSessionsAsBroken(sessions.map(s => s.id))
         }
     }
 
@@ -151,7 +153,7 @@ class SessionsCachingService
 
                 member.metadata = userMetadata
 
-                await updateUserMetadata(JSON.stringify(userMetadata), member.id);
+                await this.sessionsDb.updateUserMetadata(JSON.stringify(userMetadata), member.id);
 
                 return Promise.resolve(true);
             }
@@ -201,7 +203,7 @@ class SessionsCachingService
                 member.isConnected = true;
                 sessionData.currentRealSize++;
 
-                await updateUsersConnectionState(true, [member.id]);
+                await this.sessionsDb.updateUsersConnectionState(true, [member.id]);
                 return true;
             }
         }
@@ -233,7 +235,7 @@ class SessionsCachingService
                 member.isConnected = false;
                 sessionData.currentRealSize--;
 
-                await updateUsersConnectionState(false, [member.id]);
+                await this.sessionsDb.updateUsersConnectionState(false, [member.id]);
                 return true;
             }
         }
@@ -264,7 +266,7 @@ class SessionsCachingService
             throw new SessionNotFoundError("Unauthorized session start, only creator can start the session.")
         }
 
-        await updateSessionsStateByIds([sessionToStart.id], SessionState.RUNNING);
+        await this.sessionsDb.updateSessionsStateByIds([sessionToStart.id], SessionState.RUNNING);
         sessionToStart.sessionState = SessionState.RUNNING;
 
         logger.info(`Session ${sessionUUID} is running:`);
@@ -289,7 +291,7 @@ class SessionsCachingService
 
         const sessionId = sessionToTerminate?.id as number;
 
-        await markSessionsAsBroken([ sessionId ]);
+        await this.sessionsDb.markSessionsAsBroken([ sessionId ]);
 
         return sessionToTerminate;
     }
@@ -311,7 +313,7 @@ class SessionsCachingService
 
         const sessionId = sessionToTerminate?.id as number;
         // we update the state in db here since we removed it from the cache
-        await updateSessionsStateByIds([ sessionId ], SessionState.MATCHED);
+        await this.sessionsDb.updateSessionsStateByIds([ sessionId ], SessionState.MATCHED);
     }
 
     /** Supposed to be called once users are happy with the result and the session can be completely disposed and deleted.
@@ -331,7 +333,7 @@ class SessionsCachingService
 
         const sessionId = sessionToFinish?.id as number;
         // we update the state in db here since we removed it from the cache
-        await updateSessionsStateByIds([ sessionId ], SessionState.MATCHED);
+        await this.sessionsDb.updateSessionsStateByIds([ sessionId ], SessionState.MATCHED);
     }
 
     /**
@@ -391,7 +393,7 @@ class SessionsCachingService
             membersWithFcm = await this.addFcmTokensToMemberData(result.users)
         }
         catch(e) {
-            await markSessionsAsBroken([ result.id ]);
+            await this.sessionsDb.markSessionsAsBroken([ result.id ]);
             logger.error('An error occurred while populating member data with FCM', { e });
         }
 
@@ -509,7 +511,7 @@ class SessionsCachingService
         }
 
 
-        return await insertNewSession({
+        return await this.sessionsDb.insertNewSession({
             creation_size: newSession.creationSize,
             real_size: newSession.currentRealSize,
             creation_time: newSession.creationTime.getTime(),

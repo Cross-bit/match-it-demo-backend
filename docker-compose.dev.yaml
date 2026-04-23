@@ -12,6 +12,9 @@ services:
       context: ./services/activity-recommendation-system
       target: builder
     container_name: activity-recommendation-system
+    depends_on:
+      db1:
+        condition: service_healthy
 
     env_file:
       - .env.dev

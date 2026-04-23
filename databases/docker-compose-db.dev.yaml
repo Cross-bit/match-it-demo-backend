@@ -13,3 +13,8 @@ services:
       POSTGRES_USER: ${MAIN_DB_USER}
       POSTGRES_PASSWORD: ${MAIN_DB_PASS}
       POSTGRES_DB: ${MAIN_DB_NAME}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${MAIN_DB_USER} -d ${MAIN_DB_NAME} -h localhost -p ${MAIN_DB_PORT}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20

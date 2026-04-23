@@ -2,6 +2,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 from flask import Flask, request, abort, send_from_directory
 import os
+import time
+import logging
+import psycopg2
 
 from src.services.gateways.google_places_api_gateway import PlacesPhotoGateway
 from src.services.recommendations.restaurant.restaurant_recommender_service import RestaurantRecommenderService
@@ -34,6 +37,47 @@ VALID_SERVICES = {
 BASE_DIR = Path(__file__).resolve().parent
 DOCS_DIR = BASE_DIR / "docs"
 
+
+def wait_for_main_db(max_retries: int = 30, delay_s: float = 2.0) -> None:
+    """
+    Wait until the main Postgres database accepts TCP connections.
+    Prevents cold-start crashes when the API starts before db1 is ready.
+    """
+    db_name = os.getenv("MAIN_DB_NAME")
+    db_user = os.getenv("MAIN_DB_USER")
+    db_pass = os.getenv("MAIN_DB_PASS")
+    db_host = os.getenv("MAIN_DB_HOST")
+    db_port = os.getenv("MAIN_DB_PORT")
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            with psycopg2.connect(
+                dbname=db_name,
+                user=db_user,
+                password=db_pass,
+                host=db_host,
+                port=db_port,
+                connect_timeout=3,
+            ):
+                logging.info("Main DB is ready (%s:%s).", db_host, db_port)
+                return
+        except Exception as exc:
+            if attempt == max_retries:
+                logging.error(
+                    "Main DB is not reachable after %s attempts (%s:%s).",
+                    max_retries,
+                    db_host,
+                    db_port,
+                )
+                raise
+            logging.warning(
+                "Waiting for main DB attempt %s/%s failed: %s",
+                attempt,
+                max_retries,
+                exc,
+            )
+            time.sleep(delay_s)
+
 # Declare flask application.
 flaskApp = Flask(
     __name__,
@@ -43,6 +87,7 @@ flaskApp = Flask(
 
 
 # === INIT MODELS & SERVICES ===
+wait_for_main_db()
 models_manager = RestaurantRecommenderModelManager(
     force_retrain_on_init=True
 )
