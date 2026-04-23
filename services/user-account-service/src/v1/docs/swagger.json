@@ -38,6 +38,7 @@
       "post": {
         "tags": ["Credentials"],
         "summary": "Create credentials account",
+        "description": "Registers a new user account with email/password credentials.",
         "requestBody": {
           "required": true,
           "content": {
@@ -65,6 +66,7 @@
       "post": {
         "tags": ["Credentials"],
         "summary": "Login user",
+        "description": "Authenticates user credentials and returns access/refresh tokens.",
         "requestBody": {
           "required": true,
           "content": {
@@ -105,6 +107,7 @@
       "get": {
         "tags": ["Credentials"],
         "summary": "Verify new account by email token",
+        "description": "Confirms user email verification token and renders result HTML page.",
         "parameters": [
           {
             "in": "path",
@@ -143,6 +146,7 @@
       "get": {
         "tags": ["Credentials"],
         "summary": "Logout all users (admin key endpoint)",
+        "description": "Administrative endpoint that invalidates all active user sessions.",
         "parameters": [
           {
             "in": "path",
@@ -170,6 +174,7 @@
       "post": {
         "tags": ["Tokens"],
         "summary": "Refresh access token",
+        "description": "Issues a new access token based on a valid refresh token.",
         "requestBody": {
           "required": true,
           "content": {
@@ -201,6 +206,7 @@
       "delete": {
         "tags": ["Account"],
         "summary": "Logout current user",
+        "description": "Logs out currently authenticated user from active session.",
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
@@ -226,6 +232,7 @@
       "delete": {
         "tags": ["Account"],
         "summary": "Delete current user account",
+        "description": "Removes currently authenticated user account and related data.",
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
@@ -251,6 +258,7 @@
       "get": {
         "tags": ["Users"],
         "summary": "Get users profiles batch",
+        "description": "Returns public profile metadata for multiple user UUIDs.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -301,6 +309,7 @@
       "get": {
         "tags": ["Users"],
         "summary": "Get single user profile",
+        "description": "Returns public profile metadata for a single user UUID.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -340,6 +349,7 @@
       "post": {
         "tags": ["Preferences"],
         "summary": "Upload user profile picture",
+        "description": "Uploads new profile picture and stores metadata in gallery tables.",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
@@ -382,6 +392,7 @@
       "get": {
         "tags": ["Preferences"],
         "summary": "Get current user profile picture URL",
+        "description": "Fetches current authenticated user's profile picture URL.",
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {

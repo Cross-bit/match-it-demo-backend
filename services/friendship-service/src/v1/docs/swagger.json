@@ -30,6 +30,7 @@
       "post": {
         "tags": ["FriendsRequests"],
         "summary": "Send friend request",
+        "description": "Creates a pending friend request from current user to target user UUID.",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
@@ -68,6 +69,7 @@
       "post": {
         "tags": ["FriendsRequests"],
         "summary": "Admit pending friend request",
+        "description": "Accepts pending friend request and creates friendship relation.",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
@@ -106,6 +108,7 @@
       "get": {
         "tags": ["FriendsRequests"],
         "summary": "Check pending requests for current user",
+        "description": "Returns incoming pending friendship requests for authenticated user.",
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
@@ -140,6 +143,7 @@
       "get": {
         "tags": ["Friends"],
         "summary": "Get all friends of current user",
+        "description": "Returns list of all established friends for authenticated user.",
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
@@ -192,6 +196,7 @@
       "get": {
         "tags": ["Search"],
         "summary": "Search person by email",
+        "description": "Searches user by email and returns friendship/request relation flags.",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {

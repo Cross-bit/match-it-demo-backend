@@ -1,6 +1,6 @@
 from pathlib import Path
 from dotenv import load_dotenv
-from flask import Flask, request, abort
+from flask import Flask, request, abort, send_from_directory
 import os
 
 from src.services.gateways.google_places_api_gateway import PlacesPhotoGateway
@@ -32,6 +32,7 @@ VALID_SERVICES = {
 
 
 BASE_DIR = Path(__file__).resolve().parent
+DOCS_DIR = BASE_DIR / "docs"
 
 # Declare flask application.
 flaskApp = Flask(
@@ -79,6 +80,36 @@ from src.routes import api
 flaskApp.register_blueprint(api, url_prefix="/api")
 
 
+@flaskApp.get("/api/docs/openapi.json")
+def openapi_json():
+    return send_from_directory(str(DOCS_DIR), "openapi.json")
+
+
+@flaskApp.get("/api/docs")
+def swagger_ui():
+    return """
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activity Recommendation API Docs</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script>
+      window.ui = SwaggerUIBundle({
+        url: "/api/docs/openapi.json",
+        dom_id: "#swagger-ui"
+      });
+    </script>
+  </body>
+</html>
+"""
+
+
 #
 # Validation of tokens
 #
@@ -88,6 +119,9 @@ def check_internal_auth():
     skip = os.environ.get("SKIP_INTERNAL_AUTH") == "1"
 
     if request.path.startswith("/static/"):
+        return
+
+    if request.path.startswith("/api/docs"):
         return
 
     if skip:

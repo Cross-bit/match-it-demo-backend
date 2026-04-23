@@ -1,0 +1,243 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Activity Recommendation System API",
+    "version": "1.0.0",
+    "description": "REST API for movie and restaurant group recommendations, session lifecycle control, recommendation schema discovery, and assets cards lookup."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Service root URL."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Movie",
+      "description": "Movie recommendation session endpoints."
+    },
+    {
+      "name": "Restaurant",
+      "description": "Restaurant recommendation session endpoints."
+    },
+    {
+      "name": "Assets",
+      "description": "Card details for recommended items."
+    }
+  ],
+  "paths": {
+    "/api/movie/session/next": {
+      "post": {
+        "tags": ["Movie"],
+        "summary": "Get next movie recommendations",
+        "description": "Processes session voting update and returns next recommendation cards grouped by member.",
+        "security": [{ "serviceBearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "RecommendationUpdateDTO payload."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recommendations grouped by user UUID.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload."
+          },
+          "401": { "description": "Missing/invalid service authentication." },
+          "403": { "description": "Unauthorized service." }
+        }
+      }
+    },
+    "/api/movie/session/end": {
+      "post": {
+        "tags": ["Movie"],
+        "summary": "Terminate movie recommendation session",
+        "description": "Clears in-memory state for a specific movie recommendation session.",
+        "security": [{ "serviceBearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "RecommendationUpdateDTO payload."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Session terminated gracefully." },
+          "400": { "description": "Invalid request payload." }
+        }
+      }
+    },
+    "/api/movie/session/initialise": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "Get movie initialization set",
+        "description": "Returns a random initialization movie set (used to bootstrap user preference signal).",
+        "security": [{ "serviceBearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Initialization movie cards.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/restaurant/session/next": {
+      "post": {
+        "tags": ["Restaurant"],
+        "summary": "Get next restaurant recommendations",
+        "description": "Processes session update and returns next restaurant recommendations grouped by member.",
+        "security": [{ "serviceBearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "RecommendationUpdateDTO payload."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recommendations grouped by user UUID."
+          },
+          "400": { "description": "Invalid request payload." }
+        }
+      }
+    },
+    "/api/restaurant/session/end": {
+      "post": {
+        "tags": ["Restaurant"],
+        "summary": "Terminate restaurant recommendation session",
+        "description": "Finalizes a restaurant recommendation session and clears its state.",
+        "security": [{ "serviceBearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "RecommendationUpdateDTO payload."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Session terminated gracefully." },
+          "400": { "description": "Invalid request payload." }
+        }
+      }
+    },
+    "/api/restaurant/recommender/schema": {
+      "get": {
+        "tags": ["Restaurant"],
+        "summary": "Get restaurant recommender schema",
+        "description": "Returns stable category ordering and value domains expected by the restaurant recommender API.",
+        "security": [{ "serviceBearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Recommender schema.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "categories": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "price_levels": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "vector_dim": { "type": "integer" }
+                  },
+                  "required": ["categories", "price_levels", "vector_dim"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/assets/cards": {
+      "get": {
+        "tags": ["Assets"],
+        "summary": "Get cards details for item IDs",
+        "description": "Resolves cards metadata for MOVIE or RESTAURANT recommendations by item IDs.",
+        "security": [{ "serviceBearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cardId",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Comma-separated numeric IDs, e.g. `1,12,57`."
+          },
+          {
+            "in": "query",
+            "name": "sessionType",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["MOVIE", "RESTAURANT"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cards payload for requested IDs."
+          },
+          "400": {
+            "description": "Invalid query parameters."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "serviceBearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "ServiceToken"
+      }
+    }
+  }
+}

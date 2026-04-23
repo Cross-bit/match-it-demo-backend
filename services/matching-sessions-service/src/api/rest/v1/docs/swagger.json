@@ -85,6 +85,7 @@
           "Session"
         ],
         "summary": "Create session",
+        "description": "Creates a new matching session and sends invitations to selected members.",
         "security": [
           {
             "bearerAuth": []
@@ -129,6 +130,7 @@
           "Session"
         ],
         "summary": "Start session",
+        "description": "Starts recommendation/voting flow for the specified session.",
         "security": [
           {
             "bearerAuth": []
@@ -168,6 +170,7 @@
           "Session"
         ],
         "summary": "Terminate session",
+        "description": "Explicitly terminates an active session and returns operation result.",
         "security": [
           {
             "bearerAuth": []
@@ -207,6 +210,7 @@
           "Session"
         ],
         "summary": "Get session state",
+        "description": "Returns the current lifecycle state of the given session UUID.",
         "security": [
           {
             "bearerAuth": []
@@ -246,6 +250,7 @@
           "Session"
         ],
         "summary": "Connect user to session",
+        "description": "Accepts invitation and marks authenticated user as connected in session.",
         "security": [
           {
             "bearerAuth": []
@@ -285,6 +290,7 @@
           "Session"
         ],
         "summary": "Disconnect user from session",
+        "description": "Disconnects authenticated user from the specified session.",
         "security": [
           {
             "bearerAuth": []
@@ -324,6 +330,7 @@
           "Session"
         ],
         "summary": "Reject session invite",
+        "description": "Rejects session invitation for authenticated user.",
         "security": [
           {
             "bearerAuth": []
@@ -363,6 +370,7 @@
           "Session"
         ],
         "summary": "Get user session history",
+        "description": "Returns historical closed sessions visible for authenticated user.",
         "security": [
           {
             "bearerAuth": []
@@ -391,6 +399,7 @@
           "Initialization"
         ],
         "summary": "Get init movie cards",
+        "description": "Returns initialization movie cards used for cold-start preference setup.",
         "security": [
           {
             "bearerAuth": []
@@ -429,6 +438,7 @@
           "Initialization"
         ],
         "summary": "Store init movie voting results",
+        "description": "Stores votes from initialization movie round for authenticated user.",
         "security": [
           {
             "bearerAuth": []
@@ -470,6 +480,7 @@
           "Initialization"
         ],
         "summary": "Check if session type is initialized",
+        "description": "Checks whether user has already completed initialization for given session type.",
         "security": [
           {
             "bearerAuth": []
