@@ -10,7 +10,7 @@ export const pool = new Pool({
     password: process.env.POSTGRES_PASSWORD,
     ssl: process.env.USES_SSL == "1" ? { rejectUnauthorized: false } : false,
     port: +(process.env.POSTGRES_PORT || 5432),
-    max: 10000 // TODO: env variable
+    max: +(process.env.POSTGRES_POOL_MAX || process.env.MAIN_DB_MAX_CONNECTIONS || 100)
 });
 
 // this signature(defining the type of the query method) allows us to do overloads on it

@@ -1,6 +1,5 @@
 import * as nodemailer from "nodemailer";
 import SMTPTransport from "nodemailer";
-//import 'dotenv/config';
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 import { google } from 'googleapis';

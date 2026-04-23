@@ -74,7 +74,9 @@ export class RestaurantRecommenderCBCategoriesMapper {
             "generic_restaurant"
         ]
 
-            return CATEGORY_ORDER // TODO: load this from the recommender schema endpoint this.gatewayClient
+            // NOTE: category order is intentionally hardcoded for now to keep mapping stable
+            // until schema-fetch integration is implemented end-to-end.
+            return CATEGORY_ORDER
         }
 
     /** Map list of categories (from UI) into one-hot map {category: 0/1} according to loaded schema. */

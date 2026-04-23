@@ -78,8 +78,8 @@ export const deleteEmailVerificationToken = (token_id: number) : Promise<void> =
 ////////////////////////////////
 
 export const createNewUserPerDevice = () => {
-    return db1.executeTransaction(async (client: PoolClient) => {
-        //return await insertNewUserQuery(client);
+    return db1.executeTransaction(async (_client: PoolClient) => {
+        return;
     });
 }
 
@@ -117,7 +117,7 @@ export const deleteExistingUserById = async (userId: number): Promise<boolean> =
             await deleteUserByIdQuery(client, userId);
             return true;
         }
-        catch(er) // TODO: make this better, cleaner, with proper logging
+        catch(er)
         {
             return false;
         }
@@ -136,7 +136,7 @@ export const updateUserVerificationById = async (userId: number): Promise<boolea
             await updateUserVerificationByIdQuery(client, userId);
             return true;
         }
-        catch(er) { // TODO: make this better, cleaner, with proper logging
+        catch(er) {
             return false;
         }
     });
@@ -159,7 +159,7 @@ export const deleteAllUsersLoginSessionInfo = async (): Promise<boolean> => {
             await deleteAllFCMTokens(client);
             return true;
         }
-        catch(er) { // TODO: make this better, cleaner, with proper logging
+        catch(er) {
             return false;
         }
     });

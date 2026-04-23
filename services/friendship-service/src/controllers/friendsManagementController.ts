@@ -29,22 +29,6 @@ export const getAllFriends = async (req: Request, res: Response, next: NextFunct
 export const removeFriend = (req: Request, res: Response, next: NextFunction) =>
 {
     try{
-        const userUUID = req.userData.sub;
-
-        const {
-                params: { recordId },
-            } = req;
-
-        //const requestUUID = body.requestId;
-
-        /*if (!requestUUID || !senderUUID){
-            res.status(400).send({
-                name: "FRIEND_REMOVAL_FAILED",
-                message: "Removing friend failed",
-                status: 400
-            });
-        }*/
-
         res.send({
             result: "OK"
         })

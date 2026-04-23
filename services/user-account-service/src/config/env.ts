@@ -25,7 +25,8 @@ const envSchema = z.object({
     POSTGRES_DB: z.string().min(1, "POSTGRES_DB is required"),
     POSTGRES_PASSWORD: z.string().min(1, "POSTGRES_PASSWORD is required"),
     POSTGRES_PORT: z.coerce.number().default(5432),
-    MAIN_DB_MAX_CONNECTIONS: z.coerce.number().default(10000),
+    POSTGRES_POOL_MAX: z.coerce.number().optional(),
+    MAIN_DB_MAX_CONNECTIONS: z.coerce.number().default(100),
     MINIMAL_PASSWORD_STRENGTH_LVL: z.coerce.number().default(3).transform(Number),
 
     // GCS
@@ -55,7 +56,7 @@ export const env = {
     DB_NAME: parsed.data.POSTGRES_DB,
     DB_PASSWORD: parsed.data.POSTGRES_PASSWORD,
     DB_PORT: parsed.data.POSTGRES_PORT,
-    DB_MAX_CONNECTIONS: parsed.data.MAIN_DB_MAX_CONNECTIONS,
+    DB_MAX_CONNECTIONS: parsed.data.POSTGRES_POOL_MAX ?? parsed.data.MAIN_DB_MAX_CONNECTIONS,
 
     GCS_BUCKET_NAME: parsed.data.GCS_BUCKET_NAME,
     IMAGE_UPLOAD_SERVER: parsed.data.IMAGE_UPLOAD_SERVER,

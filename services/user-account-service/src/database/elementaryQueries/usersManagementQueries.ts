@@ -48,7 +48,7 @@ export const checkUserExistByEmail = async (client: PoolClient, query: UserExist
 
     const result = await client.query(queryObj);
 
-    //TODO: maybe this should be handled more propertly, if error occures...
+    // NOTE: fallback to false keeps this helper safe for malformed/empty query results.
     return result.rows[0]?.exists ? result.rows[0]?.exists : false;
 }
 

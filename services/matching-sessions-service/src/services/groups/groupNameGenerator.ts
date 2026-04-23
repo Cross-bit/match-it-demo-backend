@@ -40,10 +40,7 @@ export class RandomGroupReadableComposeNameGenerator extends NameGenerator {
     }
 }
 
-
-/*
-* FACTORY
-*/
+// FACTORY
 
 export enum NameGeneratorType {
     HASH = "hash",
@@ -85,6 +82,3 @@ export class NameGeneratorFactory {
     }
     }
 }
-
-//const groupGen = NameGeneratorFactory.create(NameGeneratorType.GROUP_READABLE);
-//console.log(groupGen.generate());

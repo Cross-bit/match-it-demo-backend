@@ -19,8 +19,6 @@ export const updateUserFCMToken = async (userId: number, fcmToken: string) : Pro
 
         await deleteFCMByUserIdQuery(client, userId)
         return await insertUsersFCMTokenQuery(client,userId, fcmToken)
-
-        //return await updateUsersFCMTokenQuery(client, userId, fcmToken);
     });
 }
 

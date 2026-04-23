@@ -3,8 +3,6 @@ import { PoolClient } from "pg"
 
 
 export const getUsersFCMsByUserUUIDsQuery = async (client: PoolClient, userUUIDS: string[]) : Promise<UserFcmRecordWithUserUUID[]> => {
-
-    // TODO: change the table structure by adding foreign key of uuid, it should make it more efficient
     const queryObj = {
         text: 'SELECT users.name, users.uuid as user_uuid, users_fcm.* FROM users_fcm JOIN users ON users.id = users_fcm.user_id WHERE users.uuid = ANY($1)',
         values: [userUUIDS]

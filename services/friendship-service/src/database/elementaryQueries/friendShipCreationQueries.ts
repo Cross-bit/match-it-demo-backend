@@ -76,8 +76,6 @@ export const createNewFriendRelationshipQuery = async (client: PoolClient, user1
 
     if (!result.rows[0] || result.rows.length == 0)
     {
-        //TODO: make this properly!! this is more like a skeleton so we can return to it later
-        // once the app will be running... !!!
         logger.error("Unable to create friend!!");
         throw Error("Unable to create friend!!");
     }

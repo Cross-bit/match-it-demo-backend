@@ -79,7 +79,7 @@ export const insertNewUserPasswordQuery = async (client: PoolClient, userId: num
 ////////////////////////////////
 
 /**
- * Returns all users from the database. TODO: add pagination!!!
+ * Returns all users from the database.
  * @param client
  * @returns
  */
@@ -96,7 +96,7 @@ export const getAllUsersQuery = async (client: PoolClient) =>
 
 
 /**
- * Returns all users from the database. TODO: add pagination!!!
+ * Returns single user by internal user ID.
  * @param client
  * @returns
  */
@@ -116,7 +116,7 @@ export const getAllUsersByUserIdQuery = async (client: PoolClient, userID: numbe
 ////////////////////////////////
 
 /**
- * Returns all users from the database. TODO: add pagination!!!
+ * Marks user credentials as verified for given user ID.
  * @param client
  * @returns
  */
@@ -136,7 +136,7 @@ export const updateUserVerificationByIdQuery = async (client: PoolClient, userId
 ////////////////////////////////
 
 /**
- * Returns all users from the database. TODO: add pagination!!!
+ * Deletes user by internal user ID.
  * @param client
  * @returns
  */

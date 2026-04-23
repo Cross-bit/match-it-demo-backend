@@ -6,8 +6,6 @@ import { PoolClient } from "pg"
  *  (e.g. for friends search in all users etc...)
  */
 
-// TODO: https://github.com/Cross-bit/match-it-backend/issues/16
-
 // Get user by email and check if they are friends with the user with the given id
 export const getUserByEmailQuery = async (client: PoolClient, initiatorUUID: string, email: string): Promise<SearchedUserData | null> => {
 

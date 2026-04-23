@@ -150,7 +150,6 @@ export const terminateSession = async (sessionUUID: string, reason: SessionTermi
 
         // we notify all the clients about session termination
 
-        //const membersToSendInfoFcm = sessionData?.members.map((member) => member.fcm) as string[]
         const membersToSendInfo = sessionData?.members.map((member) => member.uuid) as string[]
 
         if (membersToSendInfo)

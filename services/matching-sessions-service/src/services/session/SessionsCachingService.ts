@@ -102,8 +102,9 @@ class SessionsCachingService
         const sessions: MatchingSession[]
         = await getAllSessionsByState(allowedStates);
 
-        if (sessions.length > 0)
-            markSessionsAsBroken(sessions.map(s => s.id)) // TODO: is this safe without await??
+        if (sessions.length > 0) {
+            await markSessionsAsBroken(sessions.map(s => s.id))
+        }
     }
 
     /**

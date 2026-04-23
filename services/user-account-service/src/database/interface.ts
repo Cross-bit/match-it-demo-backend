@@ -65,8 +65,7 @@ export interface UserExistQuery
 {
     id?: number,
     uid?: string,
-    email?: string,
-    //tel?: string TODO: ??
+    email?: string
 }
 
 export interface FcmTokenRecord

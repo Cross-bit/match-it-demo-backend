@@ -1,4 +1,3 @@
-
 import { PoolClient } from 'pg';
 import * as db1 from './dbConnection'
 
@@ -24,7 +23,7 @@ export const insertNewRefreshTokenQuery = async (userId: number,  newRefreshToke
 ////////////////////////////////
 
 /**
- * Tries to get refresh token id from the database. If fails returns -1. TODO: change this to tryGetByUserId
+ * Tries to get refresh token id from the database. If fails returns -1.
  * @param refreshToken
  * @returns
  */

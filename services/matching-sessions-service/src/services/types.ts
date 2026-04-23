@@ -122,9 +122,3 @@ export enum AvailableState {
     IS_IN_ACTIVE_SESSION = "IS_IN_ACTIVE_SESSION",
     IS_OFFLINE = "IS_OFFLINE" // meaning will probably not recieve fcm notification...
 }
-
-/// TODO: this should be standardized across all the services, so all services have common language about the topic
-export enum ApiErrors
-{
-    CONNECTION_TO_SESSION_FAILED = "CONNECTION_TO_SESSION_FAILED"
-}

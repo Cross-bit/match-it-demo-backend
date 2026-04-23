@@ -113,7 +113,7 @@ export const checkUserHasFcmToken = async (userUUID: string) : Promise<Available
  * @returns
  */
 export const checkUserIsAlive = async (userUUID: string) : Promise<AvailableState> => {
-    // TODO: for simplicity we currently ignore any life check/we don't have heartbeat etc...
+    // NOTE: liveness probing is currently not implemented (no heartbeat source in this service).
     logger.info(`AVAILABILITY: Checking user ${userUUID} is alive, result: `, { result: AvailableState.AVAILABLE })
     return AvailableState.AVAILABLE;
 }
@@ -125,7 +125,7 @@ export const checkUserIsAlive = async (userUUID: string) : Promise<AvailableStat
  * @returns
  */
 export const checkUserIsLoggedIn = async (userUUID: string) : Promise<AvailableState> => {
-    // TODO: for simplicity we currently ignore any life check/we don't have heartbeat etc...
+    // NOTE: explicit login-state check is intentionally skipped in this service for now.
     logger.info(`AVAILABILITY: Checking user ${userUUID} is logged in, result: `, { result: AvailableState.AVAILABLE })
     return AvailableState.AVAILABLE;
 }

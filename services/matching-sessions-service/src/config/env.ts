@@ -35,7 +35,8 @@ const envSchema = z.object({
     POSTGRES_DB: z.string().min(1, "POSTGRES_DB is required"),
     POSTGRES_PASSWORD: z.string().min(1, "POSTGRES_PASSWORD is required"),
     POSTGRES_PORT: z.string().default("5432").transform(Number),
-    MAIN_DB_MAX_CONNECTIONS: z.string().default("10000").transform(Number),
+    POSTGRES_POOL_MAX: z.coerce.number().optional(),
+    MAIN_DB_MAX_CONNECTIONS: z.string().default("100").transform(Number),
 
     // Recommendation service
     ACTIVITY_RECOMMENDATION_SYSTEM_API_BASE_URL: z
@@ -73,7 +74,7 @@ export const env = {
     DB_NAME: parsed.data.POSTGRES_DB,
     DB_PASSWORD: parsed.data.POSTGRES_PASSWORD,
     DB_PORT: parsed.data.POSTGRES_PORT,
-    DB_MAX_CONNECTIONS: parsed.data.MAIN_DB_MAX_CONNECTIONS,
+    DB_MAX_CONNECTIONS: parsed.data.POSTGRES_POOL_MAX ?? parsed.data.MAIN_DB_MAX_CONNECTIONS,
 
     RECOMMENDATIONS_URL: parsed.data.ACTIVITY_RECOMMENDATION_SYSTEM_API_BASE_URL,
     RECOMMENDATIONS_PORT: parsed.data.RECOMMENDATION_SYSTEM_PORT,

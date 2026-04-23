@@ -54,8 +54,10 @@ const sendPendingRequestNotification = async (friendUUID: string) => {
         log.info("[FRIENDSHIP SERVICE]: pending request notification send")
     }
     else
-    { // report to the logs (TODO: do the logging properly...)
-        console.error("Error during friend request notification send...");
+    {
+        log.warn("[FRIENDSHIP SERVICE]: pending request notification skipped, recipient has no FCM token", {
+            friendUUID
+        });
     }
 }
 
@@ -72,7 +74,7 @@ export const resolvePendingFriendRequest = async (request: DTO.AdmitPendingFrien
         throw new Error("Fatal error while resolving friendship!");
     }
 
-    //TODO: optimize and rewrite to single query...
+    // NOTE: this currently uses two reads for clarity; can be optimized into a single query later.
     const initiatorData = await getUserById(resolvedReq.user_id);
     const friendData = await getUserById(resolvedReq.friend_id);
 
@@ -110,7 +112,7 @@ export const checkForFriendRequests = async (userUUID: string) : Promise<DTO.Pen
     const pendingFriendships = await GetAllPendingFriendsByUserId(userUUID);
 
     if (!pendingFriendships){
-        console.error("Errro while trying to fetch pending requests!");
+        log.error("[FRIENDSHIP SERVICE]: failed to fetch pending requests", { userUUID });
         return [];
     }
 

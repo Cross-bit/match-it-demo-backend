@@ -12,7 +12,8 @@ export const getAllFriendsByIdQuery = async (client: PoolClient, userId: number)
     // uuid is long globally universal id, but id is just our internal primary key
     // that we use for faster tables joining end data manipulation !!!
 
-    //TODO: maybe add that we want to query only users with specific privilidges??
+    // NOTE: query currently returns all friend profiles regardless of privilege level.
+    // Adding privilege-level filtering may be a useful future enhancement.
     const queryObj = {
         text: `
             SELECT

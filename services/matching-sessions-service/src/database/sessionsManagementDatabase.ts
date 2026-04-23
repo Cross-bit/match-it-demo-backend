@@ -37,13 +37,6 @@ export const getAllUsersSessionsExcludingStates = async (userUUID: string, forbi
     });
 }
 
-/** Returns all sessions that are matched or finished. */
-/*export const getAllUsersSessionsExcludingStates = async (userUUID: string, forbiddenStates: SessionState[]) : Promise<MatchingSession[]> => {
-    return db.ExecuteTransaction(async (client: PoolClient) => {
-        return await SessionQueries.getUserSessionsFiltered(client, userUUID, [], forbiddenStates);
-    });
-}*/
-
 /** Returns all sessions for a user with given userUUID that match any of the allowed states. */
 export const getAllUsersHistorySessionsWithAllowedState = async (userUUID: string, allowedStates: SessionState[]) : Promise<MatchingSessionWithUsers[]> => {
     return db.ExecuteTransaction(async (client: PoolClient) => {
@@ -70,7 +63,7 @@ export const getAllUsersHistorySessionsWithAllowedState = async (userUUID: strin
     });
 }
 
-/** Returns active sessions for a user (legacy call wrapping the old query). */ // TODO: remove
+/** Returns active sessions for a user (legacy call wrapping the old query). */
 export const getUsersSessionByUUID = async (userUUID: string) : Promise<MatchingSession[]> => {
     return db.ExecuteTransaction(async (client: PoolClient) => {
         const session = await SessionQueries.getUserActiveSessionsQuery(client, userUUID);
@@ -176,10 +169,6 @@ export const markSessionsAsBroken = async (sessionIds: number[]) : Promise<void>
         // set state to broken
         await SessionQueries.updateSessionsStatesQuery(client, SessionState.BROKEN, sessionIds);
 
-        // remove all users from the session...
-        /*const removalPromises = sessionIds.map(sessionId => SessionQueries.deleteUsersFromSessionQuery(client, sessionId));
-
-        await Promise.all(removalPromises)*/
     });
 }
 

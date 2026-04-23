@@ -90,7 +90,9 @@ class RestaurantRecommenderModelManager:
         aggregator = RestaurantContextAggregatorJsonFile()
         restaurants_data_available = aggregator.check_data_in_database(location_gps, min_places_in_location, search_radius)
         if not restaurants_data_available:
-            aggregator.fetch_data_from_original_source(force_fetch=True) # TODO: use lazy load --> fetch on the fly
+            # NOTE: current strategy performs eager bootstrap fetch on startup.
+            # Lazy/on-demand loading can be introduced later if startup time becomes critical.
+            aggregator.fetch_data_from_original_source(force_fetch=True)
             restaurants_data_available = aggregator.check_data_in_database(location_gps, min_places_in_location, search_radius)
             if not restaurants_data_available: # if not enough data => abort
                 raise ValueError("Not enough data available")

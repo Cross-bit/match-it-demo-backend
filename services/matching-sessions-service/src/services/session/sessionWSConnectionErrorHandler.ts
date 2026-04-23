@@ -2,7 +2,6 @@ import logger from "../../logger";
 import { webSocketManager } from "../../api/ws/manager/wsManager"
 import { MemberData, SessionData } from "./SessionsCachingService";
 import * as sessionManagement from "./sessionManagementService"
-//import {SessionDagta}
 
 
 /**

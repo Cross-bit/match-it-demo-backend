@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express"
 import { findPersonByEmail } from "../services/friendsQueryService";
-import { nextTick } from "process";
 
 
 export const getPersonByEmail = async (req: Request, res: Response, next: NextFunction) =>
@@ -36,7 +35,7 @@ export const getPersonByEmail = async (req: Request, res: Response, next: NextFu
             });
         }
         else {
-            res.status(200).send({person: result}); //TODO: fix this ugly fix and use proper DTO...
+            res.status(200).send({person: result});
         }
     }
     catch(e){

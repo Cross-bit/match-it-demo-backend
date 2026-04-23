@@ -1,8 +1,6 @@
-import {Response, Request, response, NextFunction} from "express";
-import {  } from "../services/friendsQueryService"
+import {Response, Request, NextFunction} from "express";
 import * as DTO from "../services/DTOinterface";
 import { checkForFriendRequests, resolvePendingFriendRequest, setPendingFriendRequest } from "../services/friendsCreationService";
-import { CLIENT_RENEG_LIMIT } from "tls";
 
 
 export const admitFriendRequest = async (req: Request, res: Response, next: NextFunction) =>
@@ -29,30 +27,6 @@ export const admitFriendRequest = async (req: Request, res: Response, next: Next
     }
 }
 
-/*
-Is not important for now
-
-export const rejectFriendRequest = async (req: Request, res: Response) =>
-{
-    const { body } = req;
-    const senderUUID = req.userData.sub;
-
-    const requestUUID = body.requestId;
-
-    if (!requestUUID || !senderUUID){
-        res.status(424).send({
-            name: "FRIEND_REJECTION_FAILED",
-            message: "Friend request rejection failed due to internal error",
-            status: 424
-        });
-    }
-
-    const result = await resolvePendingFriendRequest({ requestUUID } as DTO.AdmitPendingFriendRequest);
-
-    res.send(result);
-}
-*/
-
 export const sendFriendRequest = async (req: Request, res: Response, next: NextFunction) => {
     try
     {
@@ -75,7 +49,13 @@ export const sendFriendRequest = async (req: Request, res: Response, next: NextF
             friendId: friendUUID,
         } as DTO.CreatePendingFriendRequest);
 
-        // TODO: it can be null return failed in such a case!!!!
+        if (!result) {
+            return res.status(409).send({
+                name: "FRIEND_REQUEST_ALREADY_EXISTS",
+                message: "Friend request already exists or users are already connected.",
+                status: 409
+            });
+        }
 
         res.send(result);
     }

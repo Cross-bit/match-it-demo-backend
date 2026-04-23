@@ -51,8 +51,6 @@ export enum wsDataType {
     ACK = "ACK",
 };
 
-//export enum connectionUpdateState { ONLINE = "ONLINE", OFFLINE = "OFFLINE"}
-
 export interface UserConnectionStateUpdateWSDTO {
     userUUID: string,
     isOnline: boolean

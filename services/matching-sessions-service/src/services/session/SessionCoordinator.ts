@@ -336,16 +336,6 @@ class MatchingSessionCoordinator
 
     }
 
-    /*public tryRewindLastMatchingSessionDeck(sessionUUID: string, userUUID: string) {
-        const sessionInfo = this.pendingSessions.get(sessionUUID) as SyncingSessionInfo;
-        if (!sessionInfo) {
-            logger.error(`Session info for session ${sessionUUID} not in waiting list!`);
-            throw new DomainError(`Session info for session ${sessionUUID} not in waiting list!`);
-        }
-
-        //return sessionInfo.clientsCurrentlyVoting <= 0;
-    }*/
-
     private allClientsFinishedMatching(sessionUUID: string) : boolean {
         const sessionInfo = this.pendingSessions.get(sessionUUID) as SyncingSessionInfo;
         if (!sessionInfo) {

@@ -5,14 +5,6 @@ import { readFileSync } from "fs";
 import logger from "../../logger";
 import path from "path";
 
-
-/*const authorisationFilePath = process.env.FIREBASE_APPLICATION_CREDENTIALS ?? "FIREBASE_APPLICATION_CREDENTIALS env not set!";
-logger.info(`[Firebase FCM]: authorisation file location: ${authorisationFilePath}`);
-
-const serviceAccountJsonKey = JSON.parse(
-  readFileSync(path.resolve(authorisationFilePath), "utf-8")
-);*/
-
 let serviceAccount;
 
 if (process.env.FIREBASE_CREDENTIALS_JSON) {
@@ -44,14 +36,6 @@ if (process.env.FIREBASE_CREDENTIALS_JSON) {
     credential: admin.credential.applicationDefault(),
   });
 }
-
-// INIT firebase client
-
-/*admin.initializeApp({
-  credential: admin.credential.cert(serviceAccountJsonKey), // admin.credential.applicationDefault(), // alternativly with string JSON: admin.credential.cert(serviceAccount),
-  //databaseURL: 'firebase-adminsdk-5da4g@match-it-backend-free.iam.gserviceaccount.com',
-});*/
-
 
 /**
  * Sends simple FCM Notification, these are implicitly shown to the user on frontend, but are not captured on the background...

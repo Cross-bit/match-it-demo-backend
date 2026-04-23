@@ -1,5 +1,3 @@
-//import StatusError from "./StatusError"
-
 export default abstract class MailNotificationError extends Error
 {
     public readonly status: number;
