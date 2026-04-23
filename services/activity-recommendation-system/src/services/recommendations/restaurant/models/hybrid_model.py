@@ -66,37 +66,11 @@ class RestaurantsHybridRecommender:
             logging.info(f"CB profile {uid}: nonzero={np.count_nonzero(vec)}, norm={np.linalg.norm(vec):.4f}")
 
         group_members_ids = list(self._group_model.get_all_connected_members_ids())
-        alpha = self._mixing_alpha_value(group_members_ids)
 
         results = {}
 
         for uid in group_members_ids:
-            # CF scores for this user
-            cf_item_scores = self.cf_model.get_item_scores_from_external_vector(individual_cf[uid])
-            cf_df = pd.DataFrame.from_dict(cf_item_scores, orient="index", columns=["score"])
-            cf_df.index.name = "id"
-            cf_df = self._normalize_and_sort_recommendations(cf_df)
-
-            # CB scores for this user
-            max_price = self._group_model.get_cb_max_price()
-            cb_df = self.cb_model.get_all_recommendation_by_external_profile(
-                individual_cb[uid],
-                CbRecommendationRestrictions(
-                    self._default_search_city_coords,
-                    self._default_search_radius_meters,
-                    exclude_items,
-                    False,
-                    max_price,
-                ),
-            )
-            cb_df = self._normalize_and_sort_recommendations(cb_df)
-
-            # Merge + hybrid score (same as for groups)
-            merged = cb_df.join(cf_df, lsuffix="_cb", rsuffix="_cf", how="inner")
-            merged["score_hybrid"] = (1 - alpha) * merged["score_cb"] + alpha * merged["score_cf"]
-            if exclude_items:
-                merged = merged[~merged.index.isin(exclude_items)]
-            merged = merged.sort_values("score_hybrid", ascending=False)
+            merged = self._compute_user_hybrid_scores(uid, exclude_items, individual_cf, individual_cb)
 
             top3 = merged.head(3)
             logging.info(f"Top 3 for {uid}: {list(zip(top3.index.tolist(), top3['score_hybrid'].round(4).tolist()))}")
@@ -105,6 +79,61 @@ class RestaurantsHybridRecommender:
             results[uid] = list(zip(top.index.tolist(), top["score_hybrid"].tolist()))
 
         return results
+
+    def score_item(self, user_id: str, item_id: int) -> float:
+        """
+        Returns hybrid score of a single item for a specific connected user.
+        This keeps parity with movie recommender's priority scoring flow.
+        """
+        individual_cf = self._group_model.get_individual_cf_profiles()
+        individual_cb = self._group_model.get_individual_cb_profiles()
+
+        if user_id not in individual_cf or user_id not in individual_cb:
+            return 0.0
+
+        merged = self._compute_user_hybrid_scores(user_id, [], individual_cf, individual_cb)
+        if item_id not in merged.index:
+            return 0.0
+        return float(merged.loc[item_id]["score_hybrid"])
+
+    def _compute_user_hybrid_scores(
+        self,
+        user_id: str,
+        exclude_items: List[int],
+        individual_cf: Dict[str, np.ndarray],
+        individual_cb: Dict[str, np.ndarray]
+    ) -> pd.DataFrame:
+        group_members_ids = list(self._group_model.get_all_connected_members_ids())
+        alpha = self._mixing_alpha_value(group_members_ids)
+
+        # CF scores for this user
+        cf_item_scores = self.cf_model.get_item_scores_from_external_vector(individual_cf[user_id])
+        cf_df = pd.DataFrame.from_dict(cf_item_scores, orient="index", columns=["score"])
+        cf_df.index.name = "id"
+        cf_df = self._normalize_and_sort_recommendations(cf_df)
+
+        # CB scores for this user
+        max_price = self._group_model.get_cb_max_price()
+        cb_df = self.cb_model.get_all_recommendation_by_external_profile(
+            individual_cb[user_id],
+            CbRecommendationRestrictions(
+                self._default_search_city_coords,
+                self._default_search_radius_meters,
+                exclude_items,
+                False,
+                max_price,
+            ),
+        )
+        cb_df = self._normalize_and_sort_recommendations(cb_df)
+
+        # Merge + hybrid score
+        merged = cb_df.join(cf_df, lsuffix="_cb", rsuffix="_cf", how="inner")
+        merged["score_hybrid"] = (1 - alpha) * merged["score_cb"] + alpha * merged["score_cf"]
+        if exclude_items:
+            merged = merged[~merged.index.isin(exclude_items)]
+        merged = merged.sort_values("score_hybrid", ascending=False)
+
+        return merged
 
     def recommend_next_top_k(self, top_k: int, exclude_items: List[int]) -> List[Tuple[int, float]]:
         """ Returns top k recommendations for given group.

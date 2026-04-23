@@ -4,22 +4,23 @@ import { DataFCM, dataFCMType } from "./interface";
 import { readFileSync } from "fs";
 import logger from "../../logger";
 import path from "path";
+import { env } from "../../config/env";
 
 // INIT firebase client
 
 let serviceAccount;
 
-if (process.env.FIREBASE_CREDENTIALS_JSON) {
+if (env.FIREBASE_CREDENTIALS_JSON) {
   logger.info("[Firebase FCM]: using credentials from ENV");
 
-  serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS_JSON);
+  serviceAccount = JSON.parse(env.FIREBASE_CREDENTIALS_JSON);
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
 
-} else if (process.env.FIREBASE_APPLICATION_CREDENTIALS) {
-  const filePath = process.env.FIREBASE_APPLICATION_CREDENTIALS;
+} else if (env.FIREBASE_APPLICATION_CREDENTIALS) {
+  const filePath = env.FIREBASE_APPLICATION_CREDENTIALS;
 
   logger.info(`[Firebase FCM]: using credentials file: ${filePath}`);
 

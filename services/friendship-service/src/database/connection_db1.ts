@@ -1,16 +1,17 @@
 import { defaultDatabaseErrorHandler } from "./utils"
 import { Pool, PoolClient } from "pg"
 import { DbErrorMessage } from "./Errors/databaseError";
+import { env } from "../config/env";
 
 
 export const pool = new Pool({
-    user: process.env.POSTGRES_USER,
-    host: process.env.POSTGRES_HOST,
-    database: process.env.POSTGRES_DB,
-    password: process.env.POSTGRES_PASSWORD,
-    ssl: process.env.USES_SSL == "1" ? { rejectUnauthorized: false } : false,
-    port: +(process.env.POSTGRES_PORT || 5432),
-    max: +(process.env.POSTGRES_POOL_MAX || process.env.MAIN_DB_MAX_CONNECTIONS || 100)
+    user: env.DB_USER,
+    host: env.DB_HOST,
+    database: env.DB_NAME,
+    password: env.DB_PASSWORD,
+    ssl: env.USES_SSL ? { rejectUnauthorized: false } : false,
+    port: env.DB_PORT,
+    max: env.DB_MAX_CONNECTIONS
 });
 
 // this signature(defining the type of the query method) allows us to do overloads on it

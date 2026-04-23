@@ -1,6 +1,5 @@
 
 import { tryResolvePendingRequest, createNewPendingRequest as createNewPendingRequest, getAllPendingUsersByUserUUID as GetAllPendingFriendsByUserId, checkFriendshipByUUID } from "../database/friendsDatabase";
-import { NewFriendship, PendingFriendshipWithFrineData } from "../database/interface";
 import { getUserById, getUserFcmDataByUUIDs } from "../database/usersDatabase";
 import { sendFCMDataMessage } from "./FCM/fcmNotifications"
 import * as DTO from "./DTOinterface"

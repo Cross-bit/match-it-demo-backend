@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken"
 import { Request, Response, NextFunction } from "express"
+import { env } from "../config/env";
 
 
 /*export interface Request extends Request {
@@ -36,17 +37,7 @@ export function authenticateToken(req: Request, res: Response, next: NextFunctio
           status: 401
       })
 
-
-    const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
-
-    if (!ACCESS_TOKEN_SECRET)
-        return res.status(401).send({
-          name: "INERNAL_AUTHENTICATION_ERROR",
-          message: "Something went wrong during authentication",
-          status: 401
-        });
-
-    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, env.ACCESS_TOKEN_SECRET, (err, user) => {
 
       if (err) {
         return res.status(403).send({

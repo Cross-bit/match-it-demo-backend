@@ -7,11 +7,12 @@ import cors from "cors";
 import logger from "./logger"
 import { errorHandler } from "./middleware/errorHandler";
 import swaggerUi from "swagger-ui-express";
+import { env } from "./config/env";
 const swaggerDoc = require("./v1/docs/swagger.json");
 
 const expressApp: Application = express();
 
-const PORT = +(process.env.PORT || 5500)
+const PORT = env.PORT
 
 
 ///////////////////////////////////
