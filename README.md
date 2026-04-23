@@ -154,6 +154,50 @@ Some URLs in the `.env.dev` file may need to be adjusted accordingly — see the
 
 ---
 
+## Unit Testing
+
+Unit tests are currently set up for TypeScript services:
+
+- `matching-sessions-service`
+- `friendship-service`
+- `user-account-service`
+
+### Run tests for one service (local Node.js)
+
+From the service directory:
+
+```sh
+npm test
+```
+
+### Run tests in Docker (recommended for consistent environment)
+
+From repository root:
+
+```sh
+./tools/tests/run-unit-tests.sh
+```
+
+Run only one service:
+
+```sh
+./tools/tests/run-unit-tests.sh --service matching-sessions-service
+```
+
+Skip rebuild (faster repeated runs):
+
+```sh
+./tools/tests/run-unit-tests.sh --no-build
+```
+
+### Practical workflow
+
+- For quick local iteration: run `npm test` in the specific service.
+- For reproducible CI-like run: use `./tools/tests/run-unit-tests.sh`.
+- Tests are independent of running `docker compose up`; the script runs tests in short-lived containers via `docker compose run --rm`.
+
+---
+
 ## Repository Structure
 
 ```
@@ -175,6 +219,8 @@ Some URLs in the `.env.dev` file may need to be adjusted accordingly — see the
 └── tools/
     ├── build/
     │   └── compose.sh               # Build & deployment helper
+    ├── tests/
+    │   └── run-unit-tests.sh        # Runs unit tests in Docker
     └── data/
         ├── movies/                  # MovieLens preparation script + README
         └── restaurants/             # Google Places aggregation script + README
