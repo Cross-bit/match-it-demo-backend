@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="1" failures="1" errors="0" time="72.56">
-  <testsuite name="Movies session recommendations test" errors="0" failures="1" skipped="0" timestamp="2026-04-24T11:31:13" time="69.84" tests="1">
-    <testcase classname="Movies session recommendations test POST /api/movie/session/next Checking" name="Movies session recommendations test POST /api/movie/session/next Checking" time="0.408">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: 200
-Received: 500
-    at /mnt/c/Users/cross/projects/research/match-it-demo-backend/integration/api-tests/recommendationSystem/movieSessoin.test.ts:88:37
-    at Generator.next (&lt;anonymous&gt;)
-    at fulfilled (/mnt/c/Users/cross/projects/research/match-it-demo-backend/integration/api-tests/recommendationSystem/movieSessoin.test.ts:38:58)
-    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+<testsuites name="jest tests" tests="1" failures="0" errors="0" time="83.182">
+  <testsuite name="Movies session recommendations test" errors="0" failures="0" skipped="0" timestamp="2026-04-24T11:37:05" time="80.528" tests="1">
+    <testcase classname="Movies session recommendations test POST /api/movie/session/next Checking" name="Movies session recommendations test POST /api/movie/session/next Checking" time="7.366">
     </testcase>
   </testsuite>
 </testsuites>

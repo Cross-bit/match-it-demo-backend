@@ -2,6 +2,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from flask import Flask, request, abort, send_from_directory
 import os
+import sys
 import time
 import logging
 import psycopg2
@@ -25,13 +26,21 @@ load_dotenv()
 MATCHING_SERVICE_NAME = os.environ.get("MATCHING_SESSIONS_SERVICE_IDENTIFIER")
 MATCHING_SERVICE_TOKEN = os.environ.get("RECSYS_MESSAGING_SERVICE_TOKEN")
 
-if not MATCHING_SERVICE_NAME or not MATCHING_SERVICE_TOKEN:
+IS_TEST_CONTEXT = (
+    "unittest" in sys.modules
+    or os.environ.get("UNIT_TESTING") == "1"
+    or os.environ.get("PYTEST_CURRENT_TEST") is not None
+)
+
+if (not MATCHING_SERVICE_NAME or not MATCHING_SERVICE_TOKEN) and not IS_TEST_CONTEXT:
     raise RuntimeError("Missing service auth configuration")
 
 # list of services which can access recommenders API
-VALID_SERVICES = {
-    MATCHING_SERVICE_NAME: MATCHING_SERVICE_TOKEN
-}
+VALID_SERVICES = (
+    {MATCHING_SERVICE_NAME: MATCHING_SERVICE_TOKEN}
+    if MATCHING_SERVICE_NAME and MATCHING_SERVICE_TOKEN
+    else {}
+)
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -86,31 +95,32 @@ flaskApp = Flask(
 )
 
 
-# === INIT MODELS & SERVICES ===
-wait_for_main_db()
-models_manager = RestaurantRecommenderModelManager(
-    force_retrain_on_init=True
-)
+if not IS_TEST_CONTEXT:
+    # === INIT MODELS & SERVICES ===
+    wait_for_main_db()
+    models_manager = RestaurantRecommenderModelManager(
+        force_retrain_on_init=True
+    )
 
-cb_model = models_manager.get_cb_model()
-cf_model = models_manager.get_cf_model()
+    cb_model = models_manager.get_cb_model()
+    cf_model = models_manager.get_cf_model()
 
-google_places_gateway = PlacesPhotoGateway()
+    google_places_gateway = PlacesPhotoGateway()
 
-rest_rec_service = RestaurantRecommenderService(
-    cf_model,
-    cb_model,
-    google_places_gateway,
-    recommendation_size=5
-)
+    rest_rec_service = RestaurantRecommenderService(
+        cf_model,
+        cb_model,
+        google_places_gateway,
+        recommendation_size=5
+    )
 
-# uložíš do app contextu
-flaskApp.config["REST_REC_SERVICE"] = rest_rec_service
+    # uložíš do app contextu
+    flaskApp.config["REST_REC_SERVICE"] = rest_rec_service
 
-# === REGISTER BLUEPRINTS ===
-from src.controllers.restaurant_controller import restaurantRecommendationsBlueprint
+    # === REGISTER BLUEPRINTS ===
+    from src.controllers.restaurant_controller import restaurantRecommendationsBlueprint
 
-flaskApp.register_blueprint(restaurantRecommendationsBlueprint)
+    flaskApp.register_blueprint(restaurantRecommendationsBlueprint)
 
 
 # Set up the dev settings.
@@ -120,9 +130,9 @@ if (IS_DEV):
     flaskApp.config['PROPAGATE_EXCEPTIONS'] = True
 
 # Set up the routes.
-
-from src.routes import api
-flaskApp.register_blueprint(api, url_prefix="/api")
+if not IS_TEST_CONTEXT:
+    from src.routes import api
+    flaskApp.register_blueprint(api, url_prefix="/api")
 
 
 @flaskApp.get("/api/docs/openapi.json")
