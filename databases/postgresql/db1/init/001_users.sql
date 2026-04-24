@@ -50,7 +50,7 @@ CREATE TABLE users_fcm (
 CREATE TABLE users_credentials (
     id SERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
-    password_hash VARCHAR(255), /*TODO: check the real limit for this field */
+    password_hash VARCHAR(255),
     is_verified BOOLEAN DEFAULT false,
 
     FOREIGN KEY (user_id)

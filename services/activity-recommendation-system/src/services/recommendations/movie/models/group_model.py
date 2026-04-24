@@ -158,7 +158,7 @@ class MovieGroupModel:
 
         if not connected_users_profiles:
             v_dims = len(next(iter(profiles_data.values())))
-            return np.zeros(v_dims, dtype=float) # todo: better!!
+            return np.zeros(v_dims, dtype=float)
 
         score_matrix = list(connected_users_profiles.values())
 

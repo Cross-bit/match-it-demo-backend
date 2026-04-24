@@ -34,7 +34,7 @@ ON users_friends (
 COMMENT ON TABLE users_friends IS 'Represents all the relationship graph users have. There is double directional edge if there is an relationship';
 
 CREATE TABLE pending_friend_requests (
-    id SERIAL PRIMARY KEY, /*TODO: maybe make the uuid primary key, here we will not need joining and the table will not be so large*/
+    id SERIAL PRIMARY KEY,
     uuid UUID NOT NULL DEFAULT uuid_generate_v4(),
     user_id BIGINT NOT NULL,  /*there is directional relation ship, this means user_id is sending friend requst to the user with friend_id */
     friend_id BIGINT NOT NULL,

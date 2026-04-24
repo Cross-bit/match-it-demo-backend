@@ -170,12 +170,26 @@ From the service directory:
 npm test
 ```
 
-### Run tests in Docker (recommended for consistent environment)
+### Run tests via helper script
 
 From repository root:
 
 ```sh
 ./tools/tests/run-unit-tests.sh
+```
+
+Default mode is `local` (no Docker required): script runs `npm test` in each service directory.
+
+Run explicitly in local mode:
+
+```sh
+./tools/tests/run-unit-tests.sh --mode local
+```
+
+Run in Docker mode:
+
+```sh
+./tools/tests/run-unit-tests.sh --mode docker
 ```
 
 Run only one service:
@@ -193,8 +207,8 @@ Skip rebuild (faster repeated runs):
 ### Practical workflow
 
 - For quick local iteration: run `npm test` in the specific service.
-- For reproducible CI-like run: use `./tools/tests/run-unit-tests.sh`.
-- Tests are independent of running `docker compose up`; the script runs tests in short-lived containers via `docker compose run --rm`.
+- For reproducible CI-like run: use Docker mode `./tools/tests/run-unit-tests.sh --mode docker`.
+- Tests are independent of running `docker compose up`; Docker mode uses short-lived containers via `docker compose run --rm`.
 
 ---
 
