@@ -1,45 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="8" failures="2" errors="0" time="140.137">
-  <testsuite name="Friendship creation API test" errors="0" failures="1" skipped="0" timestamp="2026-04-24T11:21:19" time="83.03" tests="3">
-    <testcase classname="Friendship creation API test POST /api/friends-requests/send Checking" name="Friendship creation API test POST /api/friends-requests/send Checking" time="0.168">
-    </testcase>
-    <testcase classname="Friendship creation API test POST /api/v1/friends-requests/admit Admit created friend request" name="Friendship creation API test POST /api/v1/friends-requests/admit Admit created friend request" time="0.044">
-      <failure>Error: expect(received).toHaveProperty(path)
-
-Expected path: &quot;friendshipId&quot;
-Received path: []
-
-Received value: {&quot;creationTime&quot;: &quot;2026-04-24T11:22:41.942Z&quot;, &quot;friendData&quot;: {&quot;email&quot;: &quot;alice@example.com&quot;, &quot;name&quot;: &quot;alice&quot;, &quot;profilePicUrl&quot;: &quot;&quot;}}
-    at /mnt/c/Users/cross/projects/research/match-it-demo-backend/integration/api-tests/friendship-service/friendshipCreation.test.ts:103:35
-    at Generator.next (&lt;anonymous&gt;)
-    at fulfilled (/mnt/c/Users/cross/projects/research/match-it-demo-backend/integration/api-tests/friendship-service/friendshipCreation.test.ts:38:58)
-    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
-    </testcase>
-    <testcase classname="Friendship creation API test POST /api/v1/friends-requests/check Check pending requests before admit" name="Friendship creation API test POST /api/v1/friends-requests/check Check pending requests before admit" time="0.051">
-    </testcase>
-  </testsuite>
-  <testsuite name="Movies session recommendations test" errors="0" failures="1" skipped="0" timestamp="2026-04-24T11:22:42" time="19.39" tests="1">
-    <testcase classname="Movies session recommendations test POST /api/movie/session/next Checking" name="Movies session recommendations test POST /api/movie/session/next Checking" time="0.049">
+<testsuites name="jest tests" tests="1" failures="1" errors="0" time="72.56">
+  <testsuite name="Movies session recommendations test" errors="0" failures="1" skipped="0" timestamp="2026-04-24T11:31:13" time="69.84" tests="1">
+    <testcase classname="Movies session recommendations test POST /api/movie/session/next Checking" name="Movies session recommendations test POST /api/movie/session/next Checking" time="0.408">
       <failure>Error: expect(received).toBe(expected) // Object.is equality
 
 Expected: 200
-Received: 401
-    at /mnt/c/Users/cross/projects/research/match-it-demo-backend/integration/api-tests/recommendationSystem/movieSessoin.test.ts:81:37
+Received: 500
+    at /mnt/c/Users/cross/projects/research/match-it-demo-backend/integration/api-tests/recommendationSystem/movieSessoin.test.ts:88:37
     at Generator.next (&lt;anonymous&gt;)
     at fulfilled (/mnt/c/Users/cross/projects/research/match-it-demo-backend/integration/api-tests/recommendationSystem/movieSessoin.test.ts:38:58)
     at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
-    </testcase>
-  </testsuite>
-  <testsuite name="GET /api/v1/search/:email" errors="0" failures="0" skipped="0" timestamp="2026-04-24T11:23:01" time="17.258" tests="2">
-    <testcase classname="GET /api/v1/search/:email returns person for existing email" name="GET /api/v1/search/:email returns person for existing email" time="0.053">
-    </testcase>
-    <testcase classname="GET /api/v1/search/:email returns 404 for unknown email" name="GET /api/v1/search/:email returns 404 for unknown email" time="0.017">
-    </testcase>
-  </testsuite>
-  <testsuite name="Friends management API" errors="0" failures="0" skipped="0" timestamp="2026-04-24T11:23:19" time="17.133" tests="2">
-    <testcase classname="Friends management API GET /api/v1/friends returns list wrapper" name="Friends management API GET /api/v1/friends returns list wrapper" time="0.038">
-    </testcase>
-    <testcase classname="Friends management API DELETE /api/v1/friends returns OK result" name="Friends management API DELETE /api/v1/friends returns OK result" time="0.013">
     </testcase>
   </testsuite>
 </testsuites>

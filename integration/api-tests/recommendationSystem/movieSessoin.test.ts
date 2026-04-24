@@ -63,10 +63,14 @@ describe("Movies session recommendations test", () => {
                     "sessionType": "MOVIE",
                     "members": [
                         {
-                            "userUUID": alice.uuid
+                            "userUUID": alice.uuid,
+                            "isCreator": true,
+                            "metadata": null
                         },
                         {
-                            "userUUID": bob.uuid
+                            "userUUID": bob.uuid,
+                            "isCreator": false,
+                            "metadata": null
                         }
                     ]
                 },

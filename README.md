@@ -238,6 +238,10 @@ Run only API integration tests:
 ./tools/tests/run-integration-tests.sh --api-only
 ```
 
+Integration API test details (flows, env, troubleshooting):
+
+- `integration/api-tests/README.MD`
+
 If you want the script to start backend services first:
 
 ```sh

@@ -71,7 +71,6 @@ class MovieRecommenderService:
         result: Dict[str, List[NextRecommendationItem]] = {}
 
         for user_id, recommendation in users_recommendations.items():
-
             movie_ids = [movie_id for movie_id, _ in recommendation]
             tmdb_ids = movielens_ids_to_tmdb_ids(movie_ids)
 
@@ -126,7 +125,7 @@ class MovieRecommenderService:
                 if not params:
                     continue
 
-                algo_value = params.get("algorithm", "NONE")
+                algo_value = params.get("algorithm", AlgorithmType.HYBRID.value)
 
                 try:
                     algo_type = AlgorithmType(algo_value)
@@ -139,8 +138,8 @@ class MovieRecommenderService:
                     return algo_type
 
 
-        logging.info("No algorithm specified, using NONE")
-        return AlgorithmType.NONE
+        logging.info("No algorithm specified, using HYBRID default")
+        return AlgorithmType.HYBRID
 
 
 
