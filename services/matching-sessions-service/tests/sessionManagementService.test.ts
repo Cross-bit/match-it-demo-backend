@@ -92,6 +92,7 @@ import { gateway } from "../src/services/RecommendationServices/RecommendationSy
 import { sessionContentService } from "../src/services/session/SessionCoordinator";
 import { storeAndRouteIncomingMessage } from "../src/services/chatting/chatService";
 import {
+    clearAllTimeouts,
     connectUserToSession,
     createNewSession,
     disconnectUserFromSession,
@@ -119,11 +120,18 @@ const sendReliableManyMock = webSocketManager.sendReliableMany as jest.Mock;
 const requestEndOfRecommendationMock = gateway.requestEndOfRecommendation as jest.Mock;
 const getNextUserSessionDataMock = sessionContentService.getNextUserSessionData as jest.Mock;
 const storeAndRouteIncomingMessageMock = storeAndRouteIncomingMessage as jest.Mock;
+let consoleWarnSpy: jest.SpyInstance;
 
 describe("sessionManagementService core flows", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         jest.useRealTimers();
+        consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+        consoleWarnSpy.mockRestore();
+        jest.clearAllTimers();
     });
 
     test("connectUserToSession notifies other connected members on success", async () => {
@@ -224,6 +232,7 @@ describe("sessionManagementService core flows", () => {
 
         expect(markSessionsAsBrokenMock).toHaveBeenCalledWith([11, 12]);
         expect(addNewSessionMock).toHaveBeenCalled();
+        clearAllTimeouts("s-new");
     });
 
     test("createNewSession wraps failure into CREATION_FAILED DomainError", async () => {
@@ -402,5 +411,6 @@ describe("sessionManagementService core flows", () => {
         await Promise.resolve();
 
         expect(terminateSessionCacheMock).toHaveBeenCalledWith("s-timeout");
+        clearAllTimeouts("s-timeout");
     });
 });

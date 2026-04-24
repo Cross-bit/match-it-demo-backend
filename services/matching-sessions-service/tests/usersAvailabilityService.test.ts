@@ -8,6 +8,20 @@ jest.mock("../src/services/session/SessionsCachingService", () => ({
     },
 }));
 
+jest.mock("../src/logger", () => ({
+    __esModule: true,
+    default: {
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+        child: () => ({
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        }),
+    },
+}));
+
 import { getUsersFcmsByUserUUIDs } from "../src/database/usersDatabase";
 import { sessionsCache } from "../src/services/session/SessionsCachingService";
 import {
