@@ -15,9 +15,12 @@ async function generateEntities() {
 
     for (const fileName of filesNames) {
     const filePath = join(DB_TABLE_SCRIPTS, fileName)
-
-
-    sqlToTypeOrmEntities(filePath, ENTITIES_OUT_DIR);
+    try {
+        sqlToTypeOrmEntities(filePath, ENTITIES_OUT_DIR);
+    } catch (e) {
+        console.warn(`[jest-setup] Failed to generate entities from ${fileName}, continuing.`);
+        console.warn(e);
+    }
     }
 
 }

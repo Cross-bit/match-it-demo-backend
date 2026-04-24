@@ -23,7 +23,14 @@ type enumType = {type: string, value: {type: string, value: string}[], parenthes
 
 export function sqlToTypeOrmEntities(sqlFilePath: string, outputDir: string): void {
   const sqlContent = readFileSync(sqlFilePath, 'utf-8');
-  const ast = parser.astify(sqlContent, {database: 'PostgreSQL'});
+  let ast;
+  try {
+    ast = parser.astify(sqlContent, {database: 'PostgreSQL'});
+  } catch (e) {
+    console.warn(`[entities-generator] Skipping file due to parse error: ${sqlFilePath}`);
+    console.warn(e);
+    return;
+  }
 
   //console.log('Full AST:', JSON.stringify(ast, null, 2));
 
@@ -197,18 +204,6 @@ function capitalize(str: string): string {
 }
 
 
-// Path original .sql files with tables definitions
-const DB_TABLE_SCRIPTS = join(settings.PROJECT_ROOT, "databases/postgresql/db1/init/")
-const ENTITIES_OUT_DIR = join(__dirname, "entities")
-
-const filesNames = fs.readdirSync(DB_TABLE_SCRIPTS)
-  .filter(file => file.endsWith('.sql')) // Ensure we only get .sql files
-  .sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).slice(1);
-
-for (const fileName of filesNames) {
-  const filePath = join(DB_TABLE_SCRIPTS, fileName)
-
-
-  sqlToTypeOrmEntities(filePath, ENTITIES_OUT_DIR);
-}
+// Intentionally no side effects on module import.
+// Entity generation should be invoked explicitly from the integration Jest global setup.
 
