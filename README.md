@@ -161,6 +161,7 @@ Unit tests are currently set up for TypeScript services:
 - `matching-sessions-service`
 - `friendship-service`
 - `user-account-service`
+- `activity-recommendation-system` (Python `unittest`)
 
 ### Run tests for one service (local Node.js)
 

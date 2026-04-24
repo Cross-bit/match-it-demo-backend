@@ -24,3 +24,9 @@ If you add some new package, please always refresh the `requirements.txt` file u
 
 
 (note this is only for us linux users :-))
+
+## Unit tests
+
+Run recommender unit tests from the service root:
+
+`python -m unittest discover -s tests -p "test_*.py"`
