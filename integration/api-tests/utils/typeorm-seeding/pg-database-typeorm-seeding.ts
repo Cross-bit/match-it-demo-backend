@@ -21,11 +21,31 @@ import { Movie_ratings } from '../../database/type-orm-entities/entities/movie_r
 //
 
 export async function seedUsersDatabase(dataSource: DataSource, userData: Users[]): Promise<void> {
-    const userRepo = dataSource.getRepository(Users);
+    if (userData.length === 0) {
+        return;
+    }
 
-    // Insert the seed data
-    await userRepo.save(userData);
-    console.log('Database seeded with initial users.');
+    const placeholders: string[] = [];
+    const params: Array<string> = [];
+
+    userData.forEach((user, index) => {
+        const baseIdx = index * 5;
+        placeholders.push(`($${baseIdx + 1}, $${baseIdx + 2}, $${baseIdx + 3}, $${baseIdx + 4}, $${baseIdx + 5})`);
+        params.push(
+            user.uuid,
+            user.name,
+            user.email,
+            user.access_rights as unknown as string,
+            user.authentication_method as unknown as string
+        );
+    });
+
+    const sql = `
+        INSERT INTO users (uuid, name, email, access_rights, authentication_method)
+        VALUES ${placeholders.join(", ")}
+    `;
+
+    await dataSource.query(sql, params);
 }
 
 export interface TestUser extends Users {
@@ -40,11 +60,7 @@ export interface TestUser extends Users {
 export async function seedMovieVotesDatabase(dataSource: DataSource, ratingsData: Movie_ratings[]): Promise<void> {
     const userRepo = dataSource.getRepository(Movie_ratings);
 
-    // Insert the seed data
     await userRepo.save(ratingsData);
-
-    console.log('Database seeded with initial ratings for test users:');
-    ratingsData.forEach(r => console.log(r.user_id));
 }
 
 
@@ -70,6 +86,10 @@ export async function getUserFromRepo(dataSource: DataSource, email: string): Pr
 
 
 export async function truncateAllTables(dataSource: DataSource): Promise<void> {
+    if (!dataSource || !dataSource.isInitialized) {
+        return;
+    }
+
     try {
     const truncateQuery = `
         DO $$
@@ -87,9 +107,7 @@ export async function truncateAllTables(dataSource: DataSource): Promise<void> {
     `;
 
         await dataSource.query(truncateQuery);
-        console.log('All tables truncated—clean slate, baby!');
     } catch (error) {
-        console.error('Whoops, truncate hit a snag:', error);
         throw error;
     }
 }

@@ -19,8 +19,10 @@ describe("Friends management API", () => {
     });
 
     afterAll(async () => {
-        await truncateAllTables(ds);
-        await ds.destroy();
+        if (ds && ds.isInitialized) {
+            await truncateAllTables(ds);
+            await ds.destroy();
+        }
     });
 
     test("GET /api/v1/friends returns list wrapper", async () => {

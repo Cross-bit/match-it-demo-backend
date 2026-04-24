@@ -10,18 +10,21 @@ import { goodRegularUserData } from "../database/type-orm-entities/common-test-d
 dotenv.config({ path: settings.ENV_FILE });
 
 describe("GET /api/v1/search/:email", () => {
+    jest.setTimeout(120000);
     let ds: DataSource;
 
     beforeAll(async () => {
         ds = await getTypeOrmMainDatabase1DataSource().initialize();
         await truncateAllTables(ds);
         await seedUsersDatabase(ds, goodRegularUserData);
-    });
+    }, 120000);
 
     afterAll(async () => {
-        await truncateAllTables(ds);
-        await ds.destroy();
-    });
+        if (ds && ds.isInitialized) {
+            await truncateAllTables(ds);
+            await ds.destroy();
+        }
+    }, 120000);
 
     test("returns person for existing email", async () => {
         const alice = await getUserFromRepo(ds, "alice@example.com");

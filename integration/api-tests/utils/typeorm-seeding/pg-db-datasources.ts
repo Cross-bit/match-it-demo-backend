@@ -10,6 +10,10 @@ import dotenv, { DotenvParseOutput } from 'dotenv'
 import * as settings from '../../generalSettings'
 import { DataSource, DataSourceOptions } from 'typeorm'
 import {join} from 'path'
+import { Users } from "../../database/type-orm-entities/entities/users";
+import { Pending_friend_requests } from "../../database/type-orm-entities/entities/pending_friend_requests";
+import { Users_friends } from "../../database/type-orm-entities/entities/users_friends";
+import { Movie_ratings } from "../../database/type-orm-entities/entities/movie_ratings";
 
 const envVars: DotenvParseOutput | undefined = (() => {
 
@@ -38,6 +42,8 @@ export const getTypeOrmMainDatabase1DataSource = () => {
         password: main_db1_password,
         database: main_db1_database,
         synchronize: false,
-        entities: [join(__dirname, '../../database/type-orm-entities/entities/*.ts')],
+        // Load only entities required by current integration suites.
+        // This avoids failures from partially generated entities for unsupported SQL constructs.
+        entities: [Users, Pending_friend_requests, Users_friends, Movie_ratings],
     });
 }

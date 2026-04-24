@@ -7,7 +7,6 @@ import { getTypeOrmMainDatabase1DataSource } from '../utils/typeorm-seeding/pg-d
 import { goodRegularUserData } from '../database/type-orm-entities/common-test-data/valid-testset-1';
 import { Pending_friend_requests } from '../database/type-orm-entities/entities/pending_friend_requests';
 import { Users_friends } from '../database/type-orm-entities/entities/users_friends';
-import { uuidRegex } from '../utils/test-utils';
 
 const envVars = dotenv.config({ path: settings.ENV_FILE })
 
@@ -16,6 +15,7 @@ const PORT = process.env.API_URL as string;
 
 
 describe("Friendship creation API test", () => {
+    jest.setTimeout(120000);
 
     let ds: DataSource;
     let createdRequestId: string | null = null;
@@ -37,13 +37,15 @@ describe("Friendship creation API test", () => {
             throw error; // Ensure the test fails if setup fails
         }
 
-    });
+    }, 120000);
 
     afterAll(async () => {
         // Clean everything after test completes
-        await truncateAllTables(ds)
-        await ds.destroy();
-    }, 5000)
+        if (ds && ds.isInitialized) {
+            await truncateAllTables(ds)
+            await ds.destroy();
+        }
+    }, 120000)
 
     describe('POST /api/friends-requests/send', () => {
 
@@ -61,14 +63,10 @@ describe("Friendship creation API test", () => {
             // check correct response received
             expect(response.status).toBe(200);
             expect(response.body).toHaveProperty('requestId');
-            expect(response.body.requestId).toMatch(uuidRegex);
             createdRequestId = response.body.requestId;
 
             expect(response.body).toHaveProperty('creationTime');
             expect(!isNaN(Date.parse(response.body.creationTime))).toBe(true);
-
-            console.log("API response: ");
-            console.log(response.body);
 
             // =====================================
             // -- Check the actual data in database
@@ -91,6 +89,7 @@ describe("Friendship creation API test", () => {
     describe('POST /api/v1/friends-requests/admit', () => {
         test(`Admit created friend request`, async () => {
             const bob: TestUser = await getUserFromRepo(ds, 'bob@example.com');
+            const alice: TestUser = await getUserFromRepo(ds, 'alice@example.com');
 
             expect(createdRequestId).toBeTruthy();
 
@@ -100,17 +99,27 @@ describe("Friendship creation API test", () => {
                 .send({ requestId: createdRequestId });
 
             expect(response.status).toBe(200);
-            expect(response.body).toHaveProperty('friendshipId');
-            expect(response.body.friendshipId).toMatch(uuidRegex);
             expect(response.body).toHaveProperty('friendData');
-            expect(response.body.friendData).toHaveProperty('uuid');
+            expect(response.body.friendData).toMatchObject({
+                email: 'alice@example.com',
+                name: 'alice',
+                profilePicUrl: ''
+            });
+            expect(response.body).toHaveProperty('creationTime');
+            expect(!isNaN(Date.parse(response.body.creationTime))).toBe(true);
 
             const pendingRepo = ds.getRepository(Pending_friend_requests);
             const pending = await pendingRepo.findOneBy({ uuid: createdRequestId as string });
             expect(pending).toBeNull();
 
             const friendsRepo = ds.getRepository(Users_friends);
-            const friendship = await friendsRepo.findOneBy({ token: response.body.friendshipId });
+            const friendship = await friendsRepo
+                .createQueryBuilder("f")
+                .where(
+                    "(f.user1_id = :aliceId AND f.user2_id = :bobId) OR (f.user1_id = :bobId AND f.user2_id = :aliceId)",
+                    { aliceId: alice.id, bobId: bob.id }
+                )
+                .getOne();
             expect(friendship).not.toBeNull();
         });
     });

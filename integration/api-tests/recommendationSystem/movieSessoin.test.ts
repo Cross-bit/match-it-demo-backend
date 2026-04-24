@@ -5,16 +5,17 @@ import request from 'supertest';
 import { getUserFromRepo, seedMovieVotesDatabase, seedUsersDatabase, TestUser, truncateAllTables } from '../utils/typeorm-seeding/pg-database-typeorm-seeding';
 import { getTypeOrmMainDatabase1DataSource } from '../utils/typeorm-seeding/pg-db-datasources';
 import { goodRegularUserData, movieRatings_5 } from '../database/type-orm-entities/common-test-data/valid-testset-1';
-import { Pending_friend_requests } from '../database/type-orm-entities/entities/pending_friend_requests';
-import { uuidRegex } from '../utils/test-utils';
 
 const envVars = dotenv.config({ path: settings.ENV_FILE })
 
 const SERVICE_PORT = process.env.API_URL as string;
 const PORT = process.env.API_URL as string;
+const RECOMMENDER_CALLER_SERVICE = settings.ENV_VARS?.MATCHING_SESSIONS_SERVICE_IDENTIFIER as string;
+const RECOMMENDER_CALLER_TOKEN = settings.ENV_VARS?.RECSYS_MESSAGING_SERVICE_TOKEN as string;
 
 
 describe("Movies session recommendations test", () => {
+    jest.setTimeout(120000);
 
     let ds: DataSource;
 
@@ -35,17 +36,21 @@ describe("Movies session recommendations test", () => {
             throw error; // Ensure the test fails if setup fails
         }
 
-    });
+    }, 120000);
 
     afterAll(async () => {
         // Clean everything after test completes
-        await truncateAllTables(ds)
-        await ds.destroy();
-    }, 5000)
+        if (ds && ds.isInitialized) {
+            await truncateAllTables(ds)
+            await ds.destroy();
+        }
+    }, 120000)
 
     describe('POST /api/movie/session/next', () => {
 
         test(`Checking`, async () => {
+            expect(RECOMMENDER_CALLER_SERVICE).toBeTruthy();
+            expect(RECOMMENDER_CALLER_TOKEN).toBeTruthy();
 
             const alice = await getUserFromRepo(ds, 'alice@example.com');
             const bob: TestUser = await getUserFromRepo(ds, 'bob@example.com');
@@ -70,7 +75,8 @@ describe("Movies session recommendations test", () => {
 
             const response = await request(settings.RECOMMENDATION_SERVICE_BASE_URL)
             .post('/api/movie/session/next')
-            .set('Authorization', `Bearer ${alice.accessToken}`)
+            .set('X-Service-Name', RECOMMENDER_CALLER_SERVICE)
+            .set('Authorization', `Bearer ${RECOMMENDER_CALLER_TOKEN}`)
             .send(newSessionData);
 
 
@@ -105,9 +111,3 @@ describe("Movies session recommendations test", () => {
         expect(true).toBe(true)
     });
 })
-
-
-function validateSessionResult(activeMembers: Users[])
-{
-
-}

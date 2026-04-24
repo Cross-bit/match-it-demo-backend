@@ -75,7 +75,13 @@ run_npm_project_tests() {
   (
     cd "$project_dir"
     npm install --no-audit --no-fund
-    npm test -- --runInBand
+    if [[ "$project_dir" == *"/integration/api-tests" ]]; then
+      rm -rf dist
+      npx jest --clearCache
+      npm test -- --runInBand --no-cache
+    else
+      npm test -- --runInBand
+    fi
   )
 }
 

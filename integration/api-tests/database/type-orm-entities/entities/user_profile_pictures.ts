@@ -1,18 +1,15 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import * as types from './custom_enums'
 
-@Entity('group_members_relations')
-export class Group_members_relations {
+@Entity('user_profile_pictures')
+export class User_profile_pictures {
   @PrimaryGeneratedColumn({type: 'int'})
   id!: number;
 
-  @Column('int', { name: 'group_id', nullable: false })
-  group_id!: any;
+  @Column('bigint', { name: 'image_id', nullable: false })
+  image_id!: number;
 
   @Column('uuid', { name: 'user_uuid', nullable: false })
   user_uuid!: string;
-
-  @Column('varchar', { name: 'creation_time' })
-  creation_time!: string;
 
 }

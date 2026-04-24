@@ -1,16 +1,16 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import * as types from './custom_enums'
 
-@Entity('group_members_relations')
-export class Group_members_relations {
+@Entity('groups')
+export class Groups {
   @PrimaryGeneratedColumn({type: 'int'})
   id!: number;
 
-  @Column('int', { name: 'group_id', nullable: false })
-  group_id!: any;
+  @Column('uuid', { name: 'group_uuid', nullable: false })
+  group_uuid!: string;
 
-  @Column('uuid', { name: 'user_uuid', nullable: false })
-  user_uuid!: string;
+  @Column('character varying', { name: 'label', nullable: false })
+  label!: string;
 
   @Column('varchar', { name: 'creation_time' })
   creation_time!: string;
