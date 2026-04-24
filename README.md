@@ -213,6 +213,39 @@ Skip rebuild (faster repeated runs):
 
 ---
 
+## Integration Testing
+
+Integration test projects are located in `integration/`:
+
+- `integration/config-integrity-test`
+- `integration/api-tests`
+
+Run both via helper script:
+
+```sh
+./tools/tests/run-integration-tests.sh
+```
+
+Run only config integrity checks:
+
+```sh
+./tools/tests/run-integration-tests.sh --config-only
+```
+
+Run only API integration tests:
+
+```sh
+./tools/tests/run-integration-tests.sh --api-only
+```
+
+If you want the script to start backend services first:
+
+```sh
+./tools/tests/run-integration-tests.sh --with-stack
+```
+
+---
+
 ## Repository Structure
 
 ```
@@ -235,7 +268,8 @@ Skip rebuild (faster repeated runs):
     ├── build/
     │   └── compose.sh               # Build & deployment helper
     ├── tests/
-    │   └── run-unit-tests.sh        # Runs unit tests in Docker
+    │   ├── run-unit-tests.sh        # Runs unit tests (local/docker)
+    │   └── run-integration-tests.sh # Runs integration test projects
     └── data/
         ├── movies/                  # MovieLens preparation script + README
         └── restaurants/             # Google Places aggregation script + README
