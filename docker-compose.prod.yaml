@@ -1,0 +1,147 @@
+# ======================================================
+# DESCRIPTION: Example of production environment configuration.
+# ======================================================
+# Compose file defining application services in production environment.
+# This compose file should be used with `.env.prod`.
+# You can also use the provided `tools/build/compose.sh` helper script.
+# NOTE: image sources below are placeholders/examples for thesis submission.
+#
+# Attention: for other backend application definitions such as databases, messaging brokers, ...
+# please consult corresponding directories (./databases, ./infra, ...).
+
+services:
+
+  prod-user-account-service:
+    build:
+      context: ./services/user-account-service
+      target: production
+    image: your-registry.example.com/match-it/prod-user-account-service:latest
+    container_name: prod-user-account-service
+    env_file:
+      - .env.prod
+    ports:
+      - ${USER_ACCOUNT_SERVICE_API_PORT}:${USER_ACCOUNT_SERVICE_API_PORT}
+    environment:
+      PORT: ${USER_ACCOUNT_SERVICE_API_PORT}
+      POSTGRES_USER: ${MAIN_DB_USER}
+      POSTGRES_PASSWORD: ${MAIN_DB_PASS}
+      POSTGRES_DB: ${MAIN_DB_NAME}
+      POSTGRES_HOST: ${MAIN_DB_HOST}
+      MAIN_DB_MAX_CONNECTIONS: ${MAIN_DB_MAX_CONNECTIONS}
+      ACCESS_TOKEN_EXPIRATION_TIME: ${ACCESS_TOKEN_EXPIRATION_TIME}
+      REFRESH_TOKEN_EXPIRATION_TIME: ${REFRESH_TOKEN_EXPIRATION_TIME}
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+      UNIQUE_ACCOUNT_EMAILS: ${UNIQUE_ACCOUNT_EMAILS}
+      IDENTIFIER: ${USER_ACCOUNT_SERVICE_IDENTIFIER}
+      RECOMMENDATION_SYSTEM_PORT: ${ACTIVITY_RECOMMENDATION_SYSTEM_PORT}
+      VERIFICATION_MAIL_DATA_KEY: ${VERIFICATION_MAIL_DATA_KEY}
+      HOSTING_DOMAIN_NAME: ${USER_ACCOUNT_SERVICE_HOST}
+      USES_SSL: ${USES_SSL}
+      IS_DEV: ${IS_DEV}
+      BYPASS_EMAIL_VERIFICATION: ${BYPASS_EMAIL_VERIFICATION}
+      USER_THUMBNAIL_ENCRIPTION_KEY: ${USER_THUMBNAIL_ENCRIPTION_KEY}
+      GALLERY_BASE_URL: ${GALLERY_BASE_URL}
+      SUDO_API_KEY: ${SUDO_API_KEY}
+      EMAIL_API_ENDPOINT: ${EMAIL_API_ENDPOINT}
+      EMAIL_MAILERSEND_API_KEY: ${EMAIL_MAILERSEND_API_KEY}
+      GCS_BUCKET_NAME: ${GCS_BUCKET_NAME}
+      IMAGE_UPLOAD_SERVER: ${IMAGE_UPLOAD_SERVER}
+      TMDB_API_KEY: ${TMDB_API_KEY}
+      EMAIL_MAILGUN_API_KEY: ${EMAIL_MAILGUN_API_KEY}
+      MINIMAL_PASSWORD_STRENGTH_LVL: ${MINIMAL_PASSWORD_STRENGTH_LVL}
+      POSTGRES_POOL_MAX: ${POSTGRES_POOL_MAX}
+
+  prod-matching-sessions-service:
+    build:
+      context: ./services/matching-sessions-service
+      target: production
+    image: your-registry.example.com/match-it/prod-matching-sessions-service:latest
+    container_name: prod-matching-sessions-service
+    env_file:
+      - .env.prod
+    ports:
+      - ${MATCHING_SESSIONS_SERVICE_API_PORT}:${MATCHING_SESSIONS_SERVICE_API_PORT}
+    environment:
+      MATCHING_SESSIONS_SERVICE_IDENTIFIER: ${MATCHING_SESSIONS_SERVICE_IDENTIFIER}
+      PORT: ${MATCHING_SESSIONS_SERVICE_API_PORT}
+      POSTGRES_USER: ${MAIN_DB_USER}
+      POSTGRES_PASSWORD: ${MAIN_DB_PASS}
+      POSTGRES_DB: ${MAIN_DB_NAME}
+      POSTGRES_HOST: ${MAIN_DB_HOST}
+      MAIN_DB_MAX_CONNECTIONS: ${MAIN_DB_MAX_CONNECTIONS}
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+      FIREBASE_APPLICATION_CREDENTIALS: ${FIREBASE_APPLICATION_CREDENTIALS}
+      RECOMMENDATION_SYSTEM_PORT: ${ACTIVITY_RECOMMENDATION_SYSTEM_PORT}
+      RECOMMENDATION_SERVICE_HOST: ${RECOMMENDATION_SERVICE_HOST}
+      ACTIVITY_RECOMMENDATION_SYSTEM_API_BASE_URL: ${ACTIVITY_RECOMMENDATION_SYSTEM_API_BASE_URL}
+      USES_SSL: ${USES_SSL}
+      IS_DEV: ${IS_DEV}
+      SUDO_API_KEY: ${SUDO_API_KEY}
+      RECSYS_TOKEN: ${RECSYS_MESSAGING_SERVICE_TOKEN}
+      SKIP_INTERNAL_AUTH: ${SKIP_INTERNAL_AUTH}
+      POSTGRES_POOL_MAX: ${POSTGRES_POOL_MAX}
+      APP_CLIENT_UUID: ${APP_CLIENT_UUID}
+
+
+
+  prod-friendship-service:
+    build:
+      context: ./services/friendship-service
+      target: production
+    image: your-registry.example.com/match-it/prod-friendship-service:latest
+    container_name: prod-friendship-service
+    env_file:
+      - .env.prod
+    ports:
+      - ${FRIENDSHIP_SERVICE_API_PORT}:${FRIENDSHIP_SERVICE_API_PORT}
+    environment:
+      PORT: ${FRIENDSHIP_SERVICE_API_PORT}
+      POSTGRES_USER: ${MAIN_DB_USER}
+      POSTGRES_PASSWORD: ${MAIN_DB_PASS}
+      POSTGRES_DB: ${MAIN_DB_NAME}
+      MAIN_DB_MAX_CONNECTIONS: ${MAIN_DB_MAX_CONNECTIONS}
+      POSTGRES_HOST: ${MAIN_DB_HOST}
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+      USES_SSL: ${USES_SSL}
+      IS_DEV: ${IS_DEV}
+      FIREBASE_APPLICATION_CREDENTIALS: ${FIREBASE_APPLICATION_CREDENTIALS}
+      SUDO_API_KEY: ${SUDO_API_KEY}
+      POSTGRES_POOL_MAX: ${POSTGRES_POOL_MAX}
+
+  prod-activity-recommendation-system:
+    build:
+      context: ./services/activity-recommendation-system
+      target: production
+    image: your-registry.example.com/match-it/prod-activity-recommendation-system:latest
+    container_name: prod-activity-recommendation-system
+    env_file:
+      - .env.prod
+    ports:
+      - ${ACTIVITY_RECOMMENDATION_SYSTEM_PORT}:${ACTIVITY_RECOMMENDATION_SYSTEM_PORT}
+    environment:
+      PORT: ${ACTIVITY_RECOMMENDATION_SYSTEM_PORT}
+      MODEL_MOVIE: ${DB_MOVIE}
+      DB_MOVIE: ${DB_MOVIE}
+      MAIN_DB_USER: ${MAIN_DB_USER}
+      MAIN_DB_PASS: ${MAIN_DB_PASS}
+      MAIN_DB_NAME: ${MAIN_DB_NAME}
+      MAIN_DB_HOST: ${MAIN_DB_HOST}
+      MAIN_DB_PORT: ${MAIN_DB_PORT}
+      MAIN_DB_MAX_CONNECTIONS: ${MAIN_DB_MAX_CONNECTIONS}
+      DB_2_PORT: ${MOVIES_DB_PORT}
+      DB_RESTAURANTS: ${DB_RESTAURANTS}
+      MOVIES_DATA_DB2_HOST: ${MOVIES_DATA_DB2_HOST}
+      SUDO_API_KEY: ${SUDO_API_KEY}
+      TMDB_API_KEY: ${TMDB_API_KEY}
+      IS_DEV: ${IS_DEV}
+      USES_SSL: ${USES_SSL}
+      PLACES_PHOTO_CLEANUP_ENABLED: ${PLACES_PHOTO_CLEANUP_ENABLED}
+      GOOGLE_PLACES_API_KEY: ${GOOGLE_PLACES_API_KEY}
+      GCS_BUCKET_PLACES_PHOTOS_NAME: ${GCS_BUCKET_PLACES_PHOTOS_NAME}
+      PLACES_PHOTOS_GALLERY_BASE_URL: ${PLACES_PHOTOS_GALLERY_BASE_URL}
+      PLACES_PHOTOS_UPLOAD_SERVER: ${PLACES_PHOTOS_UPLOAD_SERVER}
+      MATCHING_SERVICE_TOKEN: ${RECSYS_MESSAGING_SERVICE_TOKEN}
+      MATCHING_SESSIONS_SERVICE_IDENTIFIER: ${MATCHING_SESSIONS_SERVICE_IDENTIFIER}

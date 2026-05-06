@@ -138,6 +138,43 @@ def fetch_restaurants_data_by_ids(restaurant_ids: List[int]) -> pd.DataFrame:
         logging.exception("❌ Error while fetching restaurants by IDs")
         raise e
 
+
+def fetch_restaurant_titles_by_ids(restaurant_ids: List[int]) -> pd.DataFrame:
+    """
+    Fetch only restaurant IDs and display names by a list of database IDs.
+    This is a lightweight alternative used by recommendation post-processing.
+    """
+    if not restaurant_ids:
+        logging.warning("⚠️ No restaurant IDs provided to fetch_restaurant_titles_by_ids()")
+        return pd.DataFrame()
+
+    placeholders = ", ".join(["%s"] * len(restaurant_ids))
+    query = f"""
+        SELECT
+            id,
+            COALESCE(data->'displayName'->>'text', '') AS title
+        FROM restaurants_data
+        WHERE id IN ({placeholders});
+    """
+
+    try:
+        with psycopg2.connect(
+            dbname=MAIN_DB_NAME,
+            user=MAIN_DB_USER,
+            password=MAIN_DB_PASSWORD,
+            host=MAIN_DB_HOST,
+            port=MAIN_DB_PORT,
+            sslmode="require" if USES_SSL and USES_SSL == "1" else "disable"
+        ) as conn:
+            df = pd.read_sql_query(query, conn, params=restaurant_ids)
+
+        logging.info(f"✅ Fetched {df.shape[0]} restaurant titles by IDs")
+        return df
+
+    except Exception:
+        logging.exception("❌ Error while fetching restaurant titles by IDs")
+        raise
+
 def insert_restaurant_ratings_batch(records: List[Tuple[str, int, Optional[int], Optional[int]]]):
     """
     Batch insert or update restaurant ratings.

@@ -14,7 +14,7 @@ class UserMetadata(BaseModel):
 class MemberData(BaseModel):
     userUUID: str
     isCreator: bool
-    metadata: Optional[UserMetadata]
+    metadata: Optional[UserMetadata] = None
 
 class ItemVote(BaseModel):
     itemId: str  # Changed from int to str

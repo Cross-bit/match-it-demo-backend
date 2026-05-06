@@ -1,7 +1,9 @@
 # ======================================================
-# DESCRIPTION
+# DESCRIPTION: Example of development environment configuration.
 # ======================================================
 # Compose file defining application services in development/testing environments.
+# This compose file should be used with `.env.dev`.
+# You can also use the provided `tools/build/compose.sh` helper script.
 #
 # Attention: for other backend application definitions such as databases, messaging brokers, ...
 # please consult corresponding directories (./databases, ./infra, ...).
@@ -63,9 +65,6 @@ services:
       POSTGRES_HOST: db1
       ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
       REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
-      RABBITMQ_AMQP_PORT: ${RABBITMQ_AMQP_PORT}
-      RABBITMQ_USER: "root"
-      RABBITMQ_PASS: "toor"
       FIREBASE_APPLICATION_CREDENTIALS: ${FIREBASE_APPLICATION_CREDENTIALS}
       RECOMMENDATION_SYSTEM_PORT: ${ACTIVITY_RECOMMENDATION_SYSTEM_PORT}
       RECOMMENDATION_SERVICE_HOST: ${RECOMMENDATION_SERVICE_HOST}

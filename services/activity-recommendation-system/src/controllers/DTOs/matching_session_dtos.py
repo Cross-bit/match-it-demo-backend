@@ -1,3 +1,4 @@
+import math
 from typing import List
 from src.database.models import *
 
@@ -20,9 +21,12 @@ class NextRecommendationItem:
         self.cardData = cardData
 
     def to_dict(self):
+        raw_score = float(self.score)
+        if not math.isfinite(raw_score):
+            raw_score = 0.0
         return {
             "itemId": int(self.itemId),
-            "score": float(self.score),
+            "score": raw_score,
             "cardData": (
                 self.cardData.to_dict()
                 if hasattr(self.cardData, "to_dict")

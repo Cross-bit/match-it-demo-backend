@@ -566,7 +566,7 @@ const handleMatchingResult = async (
     result: MatchingResult<any>
     ) => {
 
-    broadcastMatchingResult(sessionData.uuid, result);
+    await broadcastMatchingResult(sessionData.uuid, result);
 
     if (result.matched) {
         await storeAndRouteIncomingMessage(
@@ -596,12 +596,12 @@ const handleMatchingResult = async (
     }
 };
 
-const broadcastMatchingResult = (
+const broadcastMatchingResult = async (
     sessionUUID: string,
     result: MatchingResult<any>
     ) => {
         for (const [userUUID, deck] of Object.entries(result.nextDeckOfCards)) {
-            webSocketManager.sendReliable(
+            await webSocketManager.sendReliable(
             {
                 matched: result.matched,
                 nextDeckOfCards: deck,
@@ -645,12 +645,11 @@ const handleVotingFailure = async (
         throw error;
     }
 
-    log.error("[UNEXPECTED ERROR] Matching evaluation failed", {
-        sessionUUID,
-        error
-    });
+    const message = error instanceof Error ? error.message : String(error);
+    const stack = error instanceof Error ? error.stack : undefined;
+    log.error(`[UNEXPECTED ERROR] Matching evaluation failed sessionUUID=${sessionUUID} — ${message}${stack ? `\n${stack}` : ""}`);
 
-    terminateSession(
+    await terminateSession(
         sessionUUID,
         SessionTerminationReason.UNEXPECTED,
         "Unexpected error during voting evaluation"

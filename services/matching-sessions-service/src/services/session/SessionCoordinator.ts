@@ -314,14 +314,25 @@ class MatchingSessionCoordinator
             // store recommended items into the session info record
             syncInfo.recommendedItems = nextRec
 
-            logger.info('[SESSION CONTENT SERVICE]: Returning next deck of cards:');
-            logger.info(nextRec.activityItems);
+            logger.info("[SESSION CONTENT SERVICE]: Returning next deck of cards (user keys):", Object.keys(nextRec));
 
             // no match return next deck of cards
+            const nextDeckOfCards: Record<string, CardT[]> = Object.fromEntries(
+                Object.entries(nextRec).map(([userId, items]) => {
+                    if (!Array.isArray(items)) {
+                        logger.error(
+                            `[SESSION CONTENT SERVICE]: expected array of rec items for user ${userId}, got ${typeof items}`
+                        );
+                        return [userId, []];
+                    }
+                    return [userId, items.map((i) => i.cardData)];
+                })
+            );
+
             resultOfLastMatching = {
                 matched: false,
                 matchedItemUUID: "",
-                nextDeckOfCards: Object.fromEntries(Object.entries(nextRec).map(([userId, items]) => [userId, items.map(i => i.cardData)])),
+                nextDeckOfCards,
                 matchedItems: [], // always empty here
                 sessionType: syncInfo.session.sessionType
             } satisfies MatchingResult<CardT>;

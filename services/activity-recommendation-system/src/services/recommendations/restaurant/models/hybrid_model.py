@@ -7,11 +7,13 @@ from typing import Any, Dict, List, Set, Tuple, Union
 import numpy as np
 import pandas as pd
 
+from src.database import restaurant_database as db
 from src.database.models import GpsLocation
 from src.services.recommendations.algorithms.interface import RecAlgoFull
 from src.services.recommendations.restaurant.models.cb_model import CbRecommendationRestrictions
 from src.services.recommendations.restaurant.models.group_model import RestaurantGroupModel
 from src.services.recommendations.restaurant.restaurant_recommender_service import RestaurantCbModel
+from src.services.recommendations.restaurant.utils.title_similarity import RestaurantTitleSimilarity
 
 
 class RestaurantsHybridRecommender:
@@ -48,6 +50,8 @@ class RestaurantsHybridRecommender:
 
         self._default_search_city_coords = GpsLocation(50.08804, 14.42076) # coords for Prague
         self._default_search_radius_meters = 1500
+        self._title_similarity = RestaurantTitleSimilarity()
+        self._title_cache: Dict[int, str] = {}
 
     def recommend_individual_next_top_k(
         self, top_k: int, exclude_items: List[int]
@@ -71,6 +75,7 @@ class RestaurantsHybridRecommender:
 
         for uid in group_members_ids:
             merged = self._compute_user_hybrid_scores(uid, exclude_items, individual_cf, individual_cb)
+            merged = self._apply_title_diversification(merged)
 
             top3 = merged.head(3)
             logging.info(f"Top 3 for {uid}: {list(zip(top3.index.tolist(), top3['score_hybrid'].round(4).tolist()))}")
@@ -147,6 +152,7 @@ class RestaurantsHybridRecommender:
 
         group_members_ids = list(self._group_model.get_all_connected_members_ids())
         hybrid_recommendation_df = self._generate_hybrid_recommendation_k(group_members_ids, exclude_items)
+        hybrid_recommendation_df = self._apply_title_diversification(hybrid_recommendation_df)
 
         top_df = hybrid_recommendation_df.head(top_k)
 
@@ -234,3 +240,52 @@ class RestaurantsHybridRecommender:
         rec_df = rec_df.set_index("id")
 
         return rec_df
+
+    def _apply_title_diversification(self, rec_df: pd.DataFrame) -> pd.DataFrame:
+        if rec_df is None or rec_df.empty:
+            return rec_df
+
+        candidate_ids = [int(idx) for idx in rec_df.index.tolist()]
+        self._ensure_titles_cached(candidate_ids)
+
+        selected_ids: List[int] = []
+        selected_titles: List[str] = []
+
+        for item_id in candidate_ids:
+            title = self._title_cache.get(item_id)
+            if not title:
+                # If name is missing, keep the item so we do not drop unknowns.
+                selected_ids.append(item_id)
+                continue
+
+            is_duplicate = any(
+                self._title_similarity.are_similar_titles(title, used_title)
+                for used_title in selected_titles
+            )
+
+            if is_duplicate:
+                continue
+
+            selected_ids.append(item_id)
+            selected_titles.append(title)
+
+        if not selected_ids:
+            return rec_df
+
+        # Preserve ranking order from the original recommendation frame.
+        return rec_df.loc[selected_ids]
+
+    def _ensure_titles_cached(self, item_ids: List[int]) -> None:
+        missing_ids = [item_id for item_id in item_ids if item_id not in self._title_cache]
+        if not missing_ids:
+            return
+
+        data_df = db.fetch_restaurant_titles_by_ids(missing_ids)
+        if data_df is None or data_df.empty:
+            return
+
+        for _, row in data_df.iterrows():
+            restaurant_id = int(row.get("id"))
+            title = row.get("title", "")
+            if title:
+                self._title_cache[restaurant_id] = str(title)
