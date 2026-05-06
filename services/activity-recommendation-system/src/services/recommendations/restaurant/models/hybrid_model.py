@@ -280,7 +280,17 @@ class RestaurantsHybridRecommender:
         if not missing_ids:
             return
 
-        data_df = db.fetch_restaurant_titles_by_ids(missing_ids)
+        try:
+            data_df = db.fetch_restaurant_titles_by_ids(missing_ids)
+        except Exception as exc:
+            # Unit tests and some local runs may execute without a live DB.
+            # In that case, skip diversification enrichment and keep ranking intact.
+            logging.warning(
+                "Skipping title cache enrichment because title lookup failed: %s",
+                exc
+            )
+            return
+
         if data_df is None or data_df.empty:
             return
 
