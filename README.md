@@ -1,248 +1,255 @@
 # Match-it Backend
 
-Backend services for the **Match-it** Android application — a group activity
-consensus app that helps friends agree on movies or nearby restaurants using
-a swipe-based voting session and group recommendation algorithms.
+Backendové služby pro mobilní aplikaci **Match-it** — výzkumný prototyp skupinového doporučovacího systému, který pomáhá skupinám přátel najít shodu na filmu nebo restauraci v okolí pomocí hlasovacích relací a skupinových doporučovacích algoritmů.
 
-> The Android client is available at [match-it-android](https://github.com/Cross-bit/match-it-demo-mobile).
+> Mobilní aplikace je dostupná v repozitáři [match-it-android](https://github.com/Cross-bit/match-it-demo-mobile/tree/thesis).
 
 ---
 
-## Overview
+## Přehled
 
-Match-it allows a group of friends to create a shared voting session, swipe through activity recommendations (movies or restaurants), and converge on something everyone likes. The backend is composed of several microservices, each responsible for a distinct domain of the application.
+Match-it umožňuje skupině uživatelů vytvořit společnou hlasovací relaci, procházet doporučené aktivity — filmy nebo restaurace — a postupně dojít ke shodě. Backend je rozdělen do několika mikroslužeb, z nichž každá pokrývá samostatnou oblast aplikace.
 
 ```
                         ┌──────────────────────────────────────────────┐
                         │              Match-it Backend                │
                         │                                              │
-  Android Client  ───►  │  user-account-manager                        │
+  Android aplikace ───► │  user-account-manager                        │
                         │  friendship-manager                          │
                         │  matching-sessions-service                   │
                         │  activity-recommendation-system              │
                         │                                              │
-                        │  External: Mailgun · FCM · Google Places API │
-                        │           The Movie Database (TMDB)          │
+                        │  Externí služby: Mailgun · FCM               │
+                        │  Google Places API · The Movie Database      │
                         └──────────────────────────────────────────────┘
 ```
 
 ---
 
-## Services
+## Služby
 
-All services live under `./services/`. Each subdirectory corresponds to one independently deployable service.
+Všechny služby se nacházejí ve složce `./services/`. Každá podsložka odpovídá jedné samostatně nasaditelné službě.
 
 ### `user-account-manager` · TypeScript / Node.js / Express
-Handles user registration, login, authentication (JWT), token refresh, and
-profile management (including profile picture upload).
+
+Zajišťuje registraci uživatelů, přihlášení, autentizaci pomocí JWT, obnovu tokenů a správu profilu včetně nahrávání profilového obrázku.
 
 ### `friendship-manager` · TypeScript / Node.js / Express
-Manages friend requests, friendship CRUD, and people search. Shares a database with `user-account-manager`
-to allow efficient relational queries across users and their connections.
+
+Spravuje žádosti o přátelství, vytváření a rušení přátelství a vyhledávání uživatelů. Sdílí databázi se službou `user-account-manager`, aby bylo možné efektivně provádět relační dotazy nad uživateli a jejich vazbami.
 
 ### `matching-sessions-service` · TypeScript / Node.js / Express
-Core service orchestrating the lifecycle of a voting session — from group creation
-and member invitations through live voting to consensus detection. Communicates bidirectionally
-with clients and delegates recommendation generation to `activity-recommendation-system`.
+
+Hlavní služba řídící životní cyklus hlasovací relace — od vytvoření skupiny a pozvání členů přes živé hlasování až po detekci shody. Komunikuje obousměrně s klienty a deleguje generování doporučení na službu `activity-recommendation-system`.
 
 ### `activity-recommendation-system` · Python / Flask
-Provides recommendation endpoints consumed by `matching-sessions-service`. Implements group recommendation algorithms for activity suggestions. Currently supports **movie recommendations**; restaurant recommendations rely on external POI data from Google Places API.
+
+Poskytuje doporučovací endpointy využívané službou `matching-sessions-service`. Implementuje algoritmy skupinového doporučování pro návrh aktivit. Aktuálně podporuje **doporučování filmů**; doporučování restaurací využívá externí data o místech z Google Places API.
 
 ---
 
-## Databases
+## Databáze
 
-The system uses a single **PostgreSQL** instance. Schema is defined via ordered init scripts in `./databases/postgresql/db1/init/`. Tables are intentionally decoupled across service domains — relationships are maintained via shared UUIDs rather than cross-domain foreign keys, so the schema can be split into per-service databases in the future if needed.
+Systém používá jednu instanci **PostgreSQL**. Schéma je definováno pomocí očíslovaných inicializačních skriptů ve složce `./databases/postgresql/db1/init/`.
+
+Tabulky jsou záměrně oddělené podle domén jednotlivých služeb. Vazby mezi doménami jsou udržovány pomocí sdílených UUID namísto cizích klíčů napříč doménami, aby bylo možné schéma v budoucnu snadněji rozdělit do samostatných databází pro jednotlivé služby.
 
 ---
 
-## External Dependencies
+## Externí závislosti
 
-| Service | Purpose |
+| Služba | Účel |
 |---|---|
-| [Mailgun](https://www.mailgun.com/) | Transactional email (registration, invitations) |
-| [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) | Push notifications |
-| [Google Places API (New)](https://developers.google.com/maps/documentation/places/web-service/overview) | Nearby restaurant discovery |
-| [The Movie Database (TMDB)](https://www.themoviedb.org/documentation/api) | Movie metadata (descriptions, ratings, posters) |
+| [Mailgun](https://www.mailgun.com/) | Transakční e-maily, například registrace a pozvánky |
+| [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) | Push notifikace |
+| [Google Places API (New)](https://developers.google.com/maps/documentation/places/web-service/overview) | Vyhledávání restaurací v okolí |
+| [The Movie Database (TMDB)](https://www.themoviedb.org/documentation/api) | Metadata filmů, například popisy, hodnocení a plakáty |
 
 ---
 
-## Dataset Preparation
+## Příprava datasetů
 
-Dataset preparation scripts live under `./tools/data/`. See the README in each subdirectory for detailed usage instructions.
+Skripty pro přípravu datasetů se nacházejí ve složce `./tools/data/`. Podrobnosti jsou uvedeny v README souborech v jednotlivých podsložkách.
 
-**Movies:** The movie recommender (EASE) requires a [MovieLens](https://grouplens.org/datasets/movielens/) dataset
-for training. Use the preparation script to produce a reduced subset — EASE builds a full item×item
-co-occurrence matrix and computes its inverse, which is memory and compute intensive on the full dataset.
-Processed files go into `services/activity-recommendation-system/src/datasets/movies/ml/`.
-See `tools/data/movies/README.md` for details.
+**Filmy:** Doporučovač filmů založený na metodě EASE vyžaduje pro trénování dataset [MovieLens](https://grouplens.org/datasets/movielens/). Pro přípravu zmenšené verze datasetu použijte připravený skript. EASE vytváří úplnou item×item ko-výskytovou matici a počítá její inverzi, což je při použití celého datasetu náročné na paměť i výpočetní čas.
 
+Zpracované soubory patří do složky:
 
-**Restaurants:** The restaurant recommendation feature relies on a pre-fetched dataset obtained via the Google
-Places API. This dataset is not included in the repository.
-See `tools/data/restaurants/README.md` for details.
+```text
+services/activity-recommendation-system/src/datasets/movies/ml/
+```
+
+Podrobnosti jsou v souboru `tools/data/movies/README.md`.
+
+**Restaurace:** Doporučování restaurací využívá předem stažený dataset získaný přes Google Places API. Tento dataset není součástí repozitáře.
+
+Podrobnosti jsou v souboru `tools/data/restaurants/README.md`.
 
 ---
 
-## Running Locally
+## Lokální spuštění
 
-The entire backend can be started in development mode from the repository root:
+Celý backend lze v development režimu spustit z kořenové složky repozitáře:
 
 ```sh
 ./tools/build/compose.sh --dev up
 ```
 
-This uses Docker Compose to build and start all services together with the database.
+Příkaz používá Docker Compose a spustí všechny služby společně s databází.
 
-### Prerequisites
+### Požadavky
 
 - Docker + Docker Compose
-- Configured `.env.dev` file — see `.env.example` in the repository root
+- Nakonfigurovaný soubor `.env.dev`; jako základ použijte `.env.example` v kořeni repozitáře
 
-### Environment Configuration
+### Konfigurace prostředí
 
-Create a `.env.dev` file based on the provided template:
+Vytvořte soubor `.env.dev` podle připravené šablony:
 
 ```bash
 cp .env.example .env.dev
 ```
 
-#### Firebase Credentials (FCM)
+#### Firebase credentials (FCM)
 
-Firebase push notifications require a service account JSON file placed directly in the repository — setting the env variable alone is not enough.
+Push notifikace přes Firebase vyžadují service account JSON soubor uložený přímo v repozitáři. Nastavení proměnné prostředí samo o sobě nestačí.
 
-1. Go to [Firebase Console](https://console.firebase.google.com/) → **Project Settings → Service Accounts → Generate new private key**
-2. Save the downloaded file as:
-   ```
+1. Otevřete [Firebase Console](https://console.firebase.google.com/) → **Project Settings → Service Accounts → Generate new private key**
+2. Stažený soubor uložte jako:
+   ```text
    config/credentials/firebase.json
    ```
-3. Make sure your `.env.dev` contains:
+3. Zkontrolujte, že `.env.dev` obsahuje:
    ```dotenv
    FIREBASE_APPLICATION_CREDENTIALS=./config/credentials/firebase.json
    ```
 
-⚠️ This application is designed for group interaction. Core functionality
-(group formation, invitations, and synchronized voting sessions) relies on
-Firebase Cloud Messaging.
+⚠️ Aplikace je navržena pro skupinovou interakci. Klíčové části systému — tvorba skupiny, pozvánky a synchronizované hlasovací relace — využívají Firebase Cloud Messaging.
 
-Without FCM, the system cannot support a multi-user session.
-> It is required by both `matching-sessions-service` and `friendship-manager`. The `config/credentials/` directory is git-ignored — never commit the credentials file.
+Bez FCM systém nepodporuje plnohodnotnou multi-user relaci.
 
-#### Required Variables
+> FCM credentials jsou vyžadovány službami `matching-sessions-service` a `friendship-manager`. Složka `config/credentials/` je uvedena v `.gitignore`; soubor s credentials nikdy necommitujte.
 
-| Variable | Description |
+#### Povinné proměnné
+
+| Proměnná | Popis |
 |---|---|
-| `ACCESS_TOKEN_SECRET` | Secret key for JWT access token signing |
-| `REFRESH_TOKEN_SECRET` | Secret key for JWT refresh token signing |
-| `FIREBASE_APPLICATION_CREDENTIALS` | Path to FCM credentials file (see above) |
-| `TMDB_API_KEY` | Required for movie metadata |
-| `GOOGLE_PLACES_API_KEY` | Required for restaurant data and photo fetching |
+| `ACCESS_TOKEN_SECRET` | Tajný klíč pro podepisování JWT access tokenů |
+| `REFRESH_TOKEN_SECRET` | Tajný klíč pro podepisování JWT refresh tokenů |
+| `FIREBASE_APPLICATION_CREDENTIALS` | Cesta k FCM credentials souboru, viz výše |
+| `TMDB_API_KEY` | Klíč vyžadovaný pro metadata filmů |
+| `GOOGLE_PLACES_API_KEY` | Klíč vyžadovaný pro data restaurací a stahování fotografií |
 
-#### Optional Variables
+#### Volitelné proměnné
 
-| Variable | Description |
+| Proměnná | Popis |
 |---|---|
-| `EMAIL_MAILGUN_API_KEY` | Required only for email verification on registration; disabled by default via `BYPASS_EMAIL_VERIFICATION` |
-| `SUDO_API_KEY` | Enables privileged REST endpoints |
+| `EMAIL_MAILGUN_API_KEY` | Vyžadováno pouze pro e-mailové ověření registrace; ve výchozím nastavení je vypnuto přes `BYPASS_EMAIL_VERIFICATION` |
+| `SUDO_API_KEY` | Povoluje privilegované REST endpointy |
 
-### Networking Notes
+### Poznámky k síti
 
-- Android emulator: use `10.0.2.2` to reach the backend running on the host machine
-- Physical device: use your local IP (e.g. `192.168.x.x`)
+- Android emulátor: pro přístup k backendu běžícímu na hostitelském počítači použijte `10.0.2.2`
+- Fyzické zařízení: použijte lokální IP adresu počítače, například `192.168.x.x`
 
-Some URLs in the `.env.dev` file may need to be adjusted accordingly — see the inline comments.
+Některé URL v souboru `.env.dev` může být potřeba upravit podle zvoleného prostředí. Podrobnosti jsou uvedeny v komentářích přímo v souboru.
 
 ---
 
-## Unit Testing
+## Unit testy
 
-Unit tests are currently set up for TypeScript services:
+Unit testy jsou aktuálně připravené pro TypeScript služby a doporučovací systém:
 
 - `matching-sessions-service`
-- `friendship-service`
-- `user-account-service`
+- `friendship-manager`
+- `user-account-manager`
 - `activity-recommendation-system` (Python `unittest`)
 
-### Run tests for one service (local Node.js)
+### Spuštění testů jedné služby lokálně
 
-From the service directory:
+Z adresáře konkrétní služby spusťte:
 
 ```sh
 npm test
 ```
 
-### Run tests via helper script
+### Spuštění testů pomocí pomocného skriptu
 
-From repository root:
+Z kořenové složky repozitáře:
 
 ```sh
 ./tools/tests/run-unit-tests.sh
 ```
 
-Default mode is `local` (no Docker required): script runs `npm test` in each service directory.
+Výchozí režim je `local` a nevyžaduje Docker. Skript spustí `npm test` v adresářích jednotlivých služeb.
 
-Run explicitly in local mode:
+Explicitní spuštění v lokálním režimu:
 
 ```sh
 ./tools/tests/run-unit-tests.sh --mode local
 ```
 
-Run in Docker mode:
+Spuštění v Docker režimu:
 
 ```sh
 ./tools/tests/run-unit-tests.sh --mode docker
 ```
 
-Run only one service:
+Spuštění pouze jedné služby:
 
 ```sh
 ./tools/tests/run-unit-tests.sh --service matching-sessions-service
 ```
 
-Skip rebuild (faster repeated runs):
+Přeskočení rebuildu pro rychlejší opakovaná spuštění:
 
 ```sh
 ./tools/tests/run-unit-tests.sh --no-build
 ```
 
-### Practical workflow
+### Praktický workflow
 
-- For quick local iteration: run `npm test` in the specific service.
-- For reproducible CI-like run: use Docker mode `./tools/tests/run-unit-tests.sh --mode docker`.
-- Tests are independent of running `docker compose up`; Docker mode uses short-lived containers via `docker compose run --rm`.
+- Pro rychlou lokální iteraci spusťte `npm test` přímo v adresáři konkrétní služby.
+- Pro reprodukovatelné spuštění podobné CI použijte Docker režim:
+  ```sh
+  ./tools/tests/run-unit-tests.sh --mode docker
+  ```
+- Testy nejsou závislé na běžícím `docker compose up`; Docker režim používá krátkodobé kontejnery přes `docker compose run --rm`.
 
 ---
 
-## Integration Testing
+## Integrační testy
 
-Integration test projects are located in `integration/`:
+Projekty integračních testů jsou ve složce `integration/`:
 
 - `integration/config-integrity-test`
 - `integration/api-tests`
 
-Run both via helper script:
+Oba typy testů lze spustit pomocí pomocného skriptu:
 
 ```sh
 ./tools/tests/run-integration-tests.sh
 ```
 
-Run only config integrity checks:
+Spuštění pouze kontroly konfigurace:
 
 ```sh
 ./tools/tests/run-integration-tests.sh --config-only
 ```
 
-Run only API integration tests:
+Spuštění pouze API integračních testů:
 
 ```sh
 ./tools/tests/run-integration-tests.sh --api-only
 ```
 
-Integration API test details (flows, env, troubleshooting):
+Podrobnosti k API integračním testům, včetně testovaných toků, prostředí a řešení problémů, jsou v souboru:
 
-- `integration/api-tests/README.MD`
+```text
+integration/api-tests/README.MD
+```
 
-If you want the script to start backend services first:
+Pokud má skript před testy spustit backendové služby:
 
 ```sh
 ./tools/tests/run-integration-tests.sh --with-stack
@@ -250,13 +257,13 @@ If you want the script to start backend services first:
 
 ---
 
-## Repository Structure
+## Struktura repozitáře
 
 ```
 .
 ├── databases/
 │   └── postgresql/db1/
-│       └── init/                    # Ordered SQL init scripts
+│       └── init/                    # Očíslované SQL inicializační skripty
 ├── services/
 │   ├── user-account-manager/
 │   ├── friendship-manager/
@@ -266,27 +273,27 @@ If you want the script to start backend services first:
 │       └── src/
 │           └── services/
 │              └── datasets/
-│                  ├── movies/ml/       # Prepared MovieLens data (not included)
-│                  └── restaurants/     # Prepared Places API data (not included)
+│                  ├── movies/ml/       # Připravená MovieLens data (nejsou součástí repozitáře)
+│                  └── restaurants/     # Připravená Places API data (nejsou součástí repozitáře)
 └── tools/
     ├── build/
-    │   └── compose.sh               # Build & deployment helper
+    │   └── compose.sh               # Pomocný skript pro build a spuštění
     ├── tests/
-    │   ├── run-unit-tests.sh        # Runs unit tests (local/docker)
-    │   └── run-integration-tests.sh # Runs integration test projects
+    │   ├── run-unit-tests.sh        # Spouští unit testy (local/docker)
+    │   └── run-integration-tests.sh # Spouští integrační testy
     └── data/
-        ├── movies/                  # MovieLens preparation script + README
-        └── restaurants/             # Google Places aggregation script + README
+        ├── movies/                  # Skript pro přípravu MovieLens dat + README
+        └── restaurants/             # Skript pro agregaci dat z Google Places + README
 ```
 
 ---
 
-> This repository contains a research prototype developed as part of a bachelor's thesis. Some datasets used in experiments are not included.
+> Tento repozitář obsahuje výzkumný prototyp vytvořený jako součást bakalářské práce. Některé datasety použité v experimentech nejsou součástí repozitáře.
 
-## License
+## Licence
 
 Copyright (c) 2026 Ondřej Kříž
 
-This software is a research prototype licensed for **non-commercial research and educational use only**. Commercial use is prohibited without explicit written permission.
+Tento software je výzkumný prototyp licencovaný pouze pro **nekomerční výzkumné a vzdělávací účely**. Komerční použití je zakázáno bez výslovného písemného souhlasu.
 
-See [LICENSE](./LICENSE) for full terms. For commercial licensing inquiries contact: ondra.kryz@seznam.cz
+Úplné licenční podmínky jsou uvedeny v souboru [LICENSE](./LICENSE). Pro dotazy ohledně komerční licence kontaktujte: ondra.kryz@seznam.cz

@@ -1,52 +1,53 @@
-markdown
+# Sběrač datasetu restaurací z Google Places
 
-# Google Places Restaurant Dataset Collector
+Tento skript slouží k sběru dat o restauracích, kavárnách, barech a podobných místech pomocí **Google Places Text Search API**. 
+Výchozí lokací je centrum Prahy.
 
-This script collects data about restaurants, cafés, bars, and similar places using the **Google Places Text Search API** (default location: Prague city center).
+## Požadavky
 
-## Requirements
-- Google API key with **Places API (New)** enabled
-- Python 3 + packages: `requests`, `tqdm`
+- Google API klíč se zapnutým **Places API (New)**
+- Python 3 + balíčky: `requests`, `tqdm`
 
-## How to run
+## Jak spustit
 
 ```sh
-# 1. Set your API key
+# 1. Nastavte svůj API klíč
 export GOOGLE_API_KEY="your_key_here"
-# or pass it directly
+
+# Nebo jej předejte přímo
 python google_places_aggregator.py --api-key your_key_here
 ```
 
-Basic run (default Prague + 20 pages):sh
+Základní spuštění, výchozí Praha + 20 stránek:
+
 ```sh
 python google_places_aggregator.py --api-key your_key_here --download-photos
 ```
 
-### Useful arguments
-- --lat 50.08804 --lng 14.42076 – search center (default: Prague)
-- --radius 12000 – search radius in meters (default: 12 km)
-- --pages 20 – number of result pages per keyword
-- --page-size 20 – results per page
-- --keywords-file keywords.json – custom list of search keywords
-- --download-photos – downloads photos (saved to out/places_photos/)
+### Užitečné argumenty
 
-## Output structure
+- `--lat 50.08804 --lng 14.42076` – střed vyhledávání, výchozí: Praha
+- `--radius 12000` – poloměr vyhledávání v metrech, výchozí: 12 km
+- `--pages 20` – počet stránek výsledků pro každé klíčové slovo
+- `--page-size 20` – počet výsledků na stránku
+- `--keywords-file keywords.json` – vlastní seznam vyhledávacích klíčových slov
+- `--download-photos` – stáhne fotografie, které budou uloženy do `out/places_photos/`
 
-```
+## Struktura výstupu
+
+```text
 out/
 ├── tmp/
 │   ├── restaurant.json
 │   ├── cafe.json
 │   ├── bar.json
-│   └── ...                  ← one file per keyword
-└── all_places.json              ← final deduplicated dataset (ready to use)
-    places_photos/               ← (only if --download-photos was used)
-
+│   └── ...                  ← jeden soubor pro každé klíčové slovo
+└── all_places.json          ← finální deduplikovaný dataset připravený k použití
+    places_photos/           ← pouze pokud byl použit argument --download-photos
 ```
 
-`all_places.json` is ready for your project — just copy it to:
+Soubor `all_places.json` je připravený pro váš projekt — stačí jej zkopírovat do:
 
 ```sh
 services/activity-recommendation-system/datasets/restaurants/all_places.json
 ```
-
